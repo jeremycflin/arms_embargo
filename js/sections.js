@@ -44,14 +44,6 @@ var scrollVis = function() {
     .domain([0,1,2])
     .rangeBands([0, height - 50], 0.1, 0.1);
 
-
-  // The line chart 
-  var lineXScale = d3.time.scale().range([0, width]);
-  var lineYScale = d3.scale.linear().range([height, 0]);
-
-  // Parsing years
-  var parseDate = d3.time.format("%y").parse;
-
   // Color is determined just by the index of the bars
   var barColors = {0: "#008080", 1: "#399785", 2: "#5AAF8C"};
 
@@ -78,11 +70,11 @@ var scrollVis = function() {
   // scale, but I will use two separate
   // ones to keep things easy.
   var xAxisBar = d3.svg.axis()
-    .scale(lineXScale)
+    .scale(xBarScale)
     .orient("bottom");
 
   var xAxisHist = d3.svg.axis()
-    .scale(lineYScale)
+    .scale(xHistScale)
     .orient("bottom")
     .tickFormat(function(d) { return d + " min"; });
 
@@ -106,8 +98,7 @@ var scrollVis = function() {
   var chart = function(selection) {
     selection.each(function(rawData) {
       // create svg and give it a width and height
-      // svg = d3.select(this).selectAll("svg").data([wordData]);
-      svg = d3.select(this).selectAll("svg").data([rawData]);
+      svg = d3.select(this).selectAll("svg").data([wordData]);
       svg.enter().append("svg").append("g");
 
       svg.attr("width", width + margin.left + margin.right);
@@ -118,8 +109,6 @@ var scrollVis = function() {
       // other elements.
       g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var totalData = getTotal(rawData);
 
       // perform some preprocessing on raw data
       var wordData = getWords(rawData);
@@ -139,7 +128,7 @@ var scrollVis = function() {
       var histMax = d3.max(histData, function(d) { return d.y; });
       yHistScale.domain([0, histMax]);
 
-      setupVis(totalData, wordData, fillerCounts, histData);
+      setupVis(wordData, fillerCounts, histData);
 
       setupSections();
 
@@ -156,7 +145,7 @@ var scrollVis = function() {
    *  element for each filler word type.
    * @param histData - binned histogram data
    */
-  setupVis = function(totalData, wordData, fillerCounts, histData) {
+  setupVis = function(wordData, fillerCounts, histData) {
     // axis
     g.append("g")
       .attr("class", "x axis")
@@ -196,30 +185,6 @@ var scrollVis = function() {
     g.selectAll(".count-title")
       .attr("opacity", 0);
 
-      // mutiple line chart
-    var lines = g.selectAll(".line").data(totalData);
-    lines.enter()
-      .append("path")
-      .attr("class", "line")
-      // .attr("x", 0)
-      // .attr("y", function(d,i) { return yBarScale(i);})
-      // .attr("fill", function(d,i) { return barColors[i]; })
-      .attr("width", 0)
-      .attr("height", lineYScale.rangeBand());
-
-    // var barText = g.selectAll(".bar-text").data(fillerCounts);
-    // barText.enter()
-    //   .append("text")
-    //   .attr("class", "bar-text")
-    //   .text(function(d) { return d.key + "…"; })
-    //   .attr("x", 0)
-    //   .attr("dx", 15)
-    //   .attr("y", function(d,i) { return yBarScale(i);})
-    //   .attr("dy", yBarScale.rangeBand() / 1.2)
-    //   .style("font-size", "110px")
-    //   .attr("fill", "white")
-    //   .attr("opacity", 0);
-
     // square grid
     var squares = g.selectAll(".square").data(wordData);
     squares.enter()
@@ -256,7 +221,6 @@ var scrollVis = function() {
       .style("font-size", "110px")
       .attr("fill", "white")
       .attr("opacity", 0);
-
 
     // histogram
     var hist = g.selectAll(".hist").data(histData);
@@ -664,17 +628,6 @@ var scrollVis = function() {
    *
    */
 
-   /**
-   * Dealing with total import data
-   * @param rawData - data read in from file
-   */
-   function getTotal(rawData) {
-    return rawData.forEach(function(d) {
-    d.year = parseDate(d.year);
-    d.value = +d.value;
-  });
-  }
-
   /**
    * getWords - maps raw data to
    * array of data objects. There is
@@ -818,5 +771,5 @@ function display(data) {
 }
 
 // load data and display
-d3.csv("data/clean/total.csv", display);
+d3.tsv("data/words.tsv", display);
 

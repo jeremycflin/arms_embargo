@@ -43,7 +43,7 @@
   position: fixed;
   top: 60px;
   z-index: 1;
-  margin-left: 0;
+  margin-left: 10;
   /* height: 600px; */
   /* width: 600px; */
   /* background-color: #ddd; */
@@ -66,15 +66,20 @@
   shape-rendering: crispEdges;
 }
 
+.line
+{
+  fill: none;
+  stroke: #008080;
+  stroke-width: 2px;
+/*  shape-rendering: crispEdges;*/
+}
+
+
 .highlight {
   fill: #008080;
   font-weight: bold;
 }
 
-.cough-arrow {
-  stroke: #000;
-  stroke-width: 4px;
 
-}
 
 

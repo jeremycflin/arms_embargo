@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scrolling Sections</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+<!--   <link rel="stylesheet" type="text/css" href="css/style.css"/> -->
+  <style>
+    .container{
+      position: relative;
+      z-index: 10;
+    }
+
+    #graphic{
+      position:fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      top:0;
+      left:0;
+    }
+
+    .text{
+      font-family: Garamond, Times;
+      font-size: 24px;
+      line-height: 2em;
+      margin-bottom: 1200px;
+      opacity: 0;
+
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- showPop => the function that will be fired -->
+
+    <div class="text" data-trigger="showPop">
+      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
+      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+    </div>
+
+    <div class="text">
+      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
+      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+    </div>
+
+    <div class="text">
+      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
+      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+    </div>
+
+    <div class="text">
+      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
+      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+    </div>
+
+  </div>
+
+  <div id="chart"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/queue.js"></script>
+<script>
+  // d3.select(window)
+  //   .on("scroll", function(){
+
+  //     // console.log("hey");
+  //     // console.log(window.scrollY); //The scroll top of the whole page
+  //     // console.log(d3.select(".text")[0][0].getBoundingClientRect());
+  //     // console.log(d3.selectAll(".text")[0][1].getBoundingClientRect().top);
+
+  //     console.log(window.innerHeight);
+
+  //   })
+
+  var linScroller = {
+
+    someVar: 10,
+    svg:{},
+    width     : 500,
+    height    : 400,
+    margin    : {top: 10, right: 10, bottom:10, left: 10},
+    x         : {},
+    y         : {},
+    xAxis     : {},
+    yAxis     : {},
+    parseDate : d3.time.format("%b %y").parse,
+
+    // topDistance: null,
+    // bottom_of_object: null,
+    // bottom_of_window: null,
+
+
+
+
+
+    init : function(){
+
+      var _that = this;
+
+      d3.select(window).on("scroll", function(){ _that.scroll(); });
+      this.makeSVG();
+      // this.findPos();
+      d3.csv("data/test.csv", function(error, data){ _that.processdata(data); } )
+ 
+
+    },
+
+    scroll: function(){
+      // console.log(window.innerHeight);
+      // console.log(d3.selectAll(".text")[0][0].getBoundingClientRect().top);
+      // console.log(-(d3.selectAll(".text")[0][0].getBoundingClientRect().top));
+      // console.log(d3.selectAll(".text")[0][0].getBoundingClientRect().top);
+      // this.showPop();
+      // this.findPos();
+      this.fade();
+
+    },
+
+    makeSVG: function(){
+      this.svg = d3.select("#graphic")
+      .append("svg")
+      .attr("width","100%")
+      .attr("height","100%");
+
+    },
+
+    findPos: function(){
+      this.topDistance = d3.select(".text")[0][0].getBoundingClientRect().top;
+      console.log(this.topDistance)
+      // console.log(window.innerHeight)
+    },
+
+
+    fade: function(){
+      var animation_height = $(window).innerHeight() * 0.4;
+      // var ratio = Math.round( (1 / animation_height) * 10000 ) / 10000;
+
+      $(".text").each(function(){
+          var objectTop = $(this).offset().top;
+          var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+          if ( objectTop < windowBottom ) {
+            if ( objectTop < windowBottom - animation_height ) {
+              $(this).css( {
+                transition: 'opacity 0.8s linear',
+                opacity: 1
+              });
+          } else {
+            $(this).css( {
+              transition: 'opacity 0.8s linear',
+              // opacity: (windowBottom - objectTop) * ratio
+              opacity: 0
+            });
+          }
+
+      } else {
+        $(this).css( 'opacity', 0 );
+        }
+      });
+    },
+
+    processdata : function(data){
+      data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.value = +d.value;
+
+        console.log(data)
+      });
+    },
+
+    createXScale : function(){
+
+
+    },
+
+
+ 
+
+    
+
+    // showPop: function(){
+    //   if(-(this.topDistance/window.innerHeight) > 1 ){
+    //     d3.selectAll(".text")
+    //     .transition()
+    //     .duration(400)
+    //     .style("opacity", "0");
+    //   } else {
+    //     d3.selectAll(".text")
+    //     .transition()
+    //     .duration(400)
+    //     .style("opacity", "1");    
+    //   }
+
+    //    if(-(this.topDistance/window.innerHeight) < 1 ){
+    //     d3.selectAll(".text")
+    //     .transition()
+    //     .duration(400)
+    //     .style("opacity", "0");
+    //   } else {
+    //     d3.selectAll(".text")
+    //     .transition()
+    //     .duration(400)
+    //     .style("opacity", "1");    
+    //   }
+    // }
+
+
+
+
+  };
+
+  linScroller.init();
+
+
+</script>
+</body>
+</html>
