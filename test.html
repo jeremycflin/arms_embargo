@@ -3,6 +3,8 @@
 <head>
   <title>Scrolling Sections</title>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+  <link href='http://fonts.googleapis.com/css?family=Crimson+Text:400,600,700,400italic,600italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 <!--   <link rel="stylesheet" type="text/css" href="css/style.css"/> -->
   <style>
     .container{
@@ -17,16 +19,88 @@
       height: 100%;
       top:0;
       left:0;
+      background-color: rgba(0,0,0,.9);
+      font-size: 0.6em;
     }
 
     .text{
       font-family: Garamond, Times;
-      font-size: 24px;
-      line-height: 2em;
-      margin-bottom: 1200px;
+      font-size: 22px;
+      line-height: 1.2em;
+      margin-bottom: 1000px;
       opacity: 0;
-
+      background-color: rgba(255,255,255,0.85);
+      max-width: 50%;
+    /*  color:white;*/
     }
+
+    .title{
+      margin-top: 400px;
+      opacity: 1;
+      line-height: 1.1em;
+      color:white;
+      background-color: initial;
+    }
+
+    .title h1{
+      font-size: 1.6em;
+      /*font-family: "Crimson Text";*/
+      font-family: "Libre Baskerville";
+    }
+
+    .author{
+      font-family: "Crimson Text";
+      font-size: 0.7em;
+      line-height: .8em;
+      color:#a3a3a3;
+    }
+
+    path { 
+      stroke: #;
+      stroke-width: ;
+      fill: none;
+    }
+
+    .line{
+      stroke-width:1.5px;
+      /*stroke: #7ea7ba;*/
+      stroke:rgba(128, 128, 128,.7);
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #eee;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+
+    .grid path{
+      stroke-width:0;
+    }
+
+    .grid .tick{
+      /*stroke:white;*/
+      stroke-width:1.5px;
+      stroke-opacity:0.9;
+      shape-rendering: crispEdges;
+    }
+
+    .dot{
+      stroke-width:1;
+      stroke:none;
+      fill:rgba(63,63,63,.9);
+    }
+
+
+
+
+
+
+
+
 
 
   </style>
@@ -36,13 +110,14 @@
     
     <!-- showPop => the function that will be fired -->
 
-    <div class="text" data-trigger="showPop">
-      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+    <div class="text title" data-trigger="showPop">
+      <h1>Are Arms Embargos Really Effective?</h1>
       <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
-      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p class="author">Produced by Jeremy C.F. Lin</p>
     </div>
 
-    <div class="text">
+    <div class="text" id="test" data-trigger="showPop">
       <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
       <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
       <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
@@ -62,7 +137,7 @@
 
   </div>
 
-  <div id="chart"></div>
+  <div id="graphic"></div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -83,16 +158,22 @@
 
   var linScroller = {
 
-    someVar: 10,
-    svg:{},
-    width     : 500,
-    height    : 400,
-    margin    : {top: 10, right: 10, bottom:10, left: 10},
-    x         : {},
-    y         : {},
-    xAxis     : {},
-    yAxis     : {},
-    parseDate : d3.time.format("%b %y").parse,
+    svg       : {},
+    // width     : window.innerWidth,
+    // height    : window.innerHeight,
+    width     : 900,
+    height    : 500,
+    margin    : {top: 10, right: 30, bottom: 30, left: 50},
+
+    data      : {},
+
+    x         : d3.time.scale(),
+    y         : d3.scale.linear(),
+    xAxis     : d3.svg.axis(),
+    yAxis     : d3.svg.axis(),
+    parseDate : d3.time.format("%Y").parse,
+    // valueline : d3.svg.line().interpolate("step-after"),
+    valueline : d3.svg.line(),
 
     // topDistance: null,
     // bottom_of_object: null,
@@ -106,11 +187,26 @@
 
       var _that = this;
 
+      this.x.range([0, this.width]);
+      this.y.range([this.height, 0]);
+
+      this.xAxis.scale(this.x);
+      this.yAxis.scale(this.y);
+
+      // this.valueline
+      // .this.x(function(d) { return this.x(d.date); })
+      // .this.y(function(d) { return this.y(d.value); });
+      // whenever its insdie of a funciton, put _that
+      
+
       d3.select(window).on("scroll", function(){ _that.scroll(); });
+
       this.makeSVG();
       // this.findPos();
-      d3.csv("data/test.csv", function(error, data){ _that.processdata(data); } )
- 
+      
+
+      d3.csv("data/clean/null_adjust/data_adjusted.csv", function(error, data){ _that.processdata(data);} )
+  
 
     },
 
@@ -126,10 +222,20 @@
     },
 
     makeSVG: function(){
+      var _that = this;
+
       this.svg = d3.select("#graphic")
       .append("svg")
+      // .attr("width", this.width + this.margin.left + this.margin.right)
+      // .attr("height", this.height + this.margin.top + this.margin.bottom)
       .attr("width","100%")
-      .attr("height","100%");
+      .attr("height","100%")
+      .attr("viewBox", "0 0 " + (this.width + this.margin.left + this.margin.right) + " " + (this.height + this.margin.top + this.margin.bottom))
+      .attr("preserveAspectRatio", "xMinYMax")
+      .attr("class", "graph-svg-component")
+      .append("g")
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
 
     },
 
@@ -143,6 +249,7 @@
     fade: function(){
       var animation_height = $(window).innerHeight() * 0.4;
       // var ratio = Math.round( (1 / animation_height) * 10000 ) / 10000;
+      var _that = this;
 
       $(".text").each(function(){
           var objectTop = $(this).offset().top;
@@ -166,21 +273,172 @@
         $(this).css( 'opacity', 0 );
         }
       });
+
+
+      $(".title").each(function(){
+          var objectTop = $(this).offset().top;
+          var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+          if ( objectTop < windowBottom ) {
+            if ( objectTop < windowBottom - animation_height ) {
+              $("#graphic").css( {
+                transition: 'background-color 1.7s linear',
+                'background-color': 'white'
+              });
+
+              $(".title").css( {
+                transition: 'color 1.7s linear',
+                'color': 'rgba(0,0,0,.8)'
+              });
+          } else {
+            $("#graphic").css( {
+              transition: 'background-color 0.8s linear',
+              // opacity: (windowBottom - objectTop) * ratio
+              'background-color': 'rgba(0,0,0,.9)'
+            });
+
+          }
+
+      } else {
+        $("#graphic").css( 'background-color', 'rgba(0,0,0,.9)' );
+        }
+      });
+
+      
+
+
     },
 
     processdata : function(data){
-      data.forEach(function(d) {
-        d.date = parseDate(d.date);
+      var _that = this;
+
+      _that.data = data;
+
+      _that.data.forEach(function(d) {
+        d.year = _that.parseDate(d.year);
         d.value = +d.value;
 
-        console.log(data)
       });
+
+      this.lineChart();
     },
 
-    createXScale : function(){
 
-
+    createXAxis : function(){
+      return d3.svg.axis()
+        .scale(this.x)
+        .orient("bottom")
+        .ticks(10)
     },
+
+    createYAxis: function(){
+      return d3.svg.axis()
+        .scale(this.y)
+        .orient("left")
+        .ticks(6)
+    },
+
+    lineChart: function(){
+      var _that = this;
+
+      // this.svg = svg;
+
+      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
+      this.y.domain([0, d3.max(this.data, function(d) { return Math.max( d.value); })]);
+
+      this.valueline
+        .x(function(d) { return _that.x(d.year); })
+        .y(function(d) { return _that.y(d.value); });
+
+
+
+      // console.log(this.valueline(this.data))
+      this.svg.append("g")         // Add the X Axis
+        .attr("class", "x axis grid")
+        .attr("transform", "translate(0," + this.height + ")")
+        .call(this.createXAxis()
+          .tickSize(-this.height)
+        );
+
+      this.svg.append("g")         // Add the Y Axis
+        .attr("class", "y axis grid")
+        .call(this.createYAxis()
+          .tickSize(-this.width)
+        )
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .style("font-size",10)
+        .text("Million dollar");;
+
+      this.svg.append("path")      
+        .attr("class", "line") 
+        // .attr("d", this.valueline(this.data));   
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "China";
+          }
+        )))
+        // .style("stroke","rgba(158, 75, 108,.7)")
+        .style("stroke","rgba(178,0,0,.5)")
+
+      this.svg.append("path")      
+        .attr("class", "line")
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "Iran";
+          }
+        )));
+
+      this.svg.append("path")      
+        .attr("class", "line") 
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "North Korea";
+          }
+        )))
+
+      this.svg.append("path")      
+        .attr("class", "line") 
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "Myanmar";
+          }
+        )));
+
+      this.svg.append("path")      
+        .attr("class", "line") 
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "Syria";
+          }
+        )));
+
+      this.svg.selectAll(".dot")
+        .data(this.data.filter(
+          function(d){
+            return d.country == "Total";
+          }
+        ))
+        .enter().append("circle")
+        .attr("class", "dot")
+        .attr("cx", this.valueline.x())
+        .attr("cy", this.valueline.y())
+        .attr("r", 2);
+
+      
+        // .append("text")
+        // .attr("transform", "rotate(-90)")
+        // .attr("y", 6)
+        // .attr("dy", ".71em")
+        // .style("text-anchor", "end")
+        // .style("font-size",10)
+        // .text("Thousand megawatthours");;
+
+
+    }
 
 
  
