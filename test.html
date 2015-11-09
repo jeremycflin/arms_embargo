@@ -19,7 +19,7 @@
       height: 100%;
       top:0;
       left:0;
-      background-color: rgba(0,0,0,.9);
+      background-color: rgba(0,0,0,.95);
       font-size: 0.6em;
     }
 
@@ -42,6 +42,10 @@
       background-color: initial;
     }
 
+    #one p{
+      margin-top: 30px;
+    }
+
     .title h1{
       font-size: 1.6em;
       /*font-family: "Crimson Text";*/
@@ -55,6 +59,14 @@
       color:#a3a3a3;
     }
 
+    /*************/
+    /*************/
+    /*************/
+    /*Line chart*/
+    /*************/
+    /*************/
+    /*************/
+
     path { 
       stroke: #;
       stroke-width: ;
@@ -64,7 +76,8 @@
     .line{
       stroke-width:1.5px;
       /*stroke: #7ea7ba;*/
-      stroke:rgba(128, 128, 128,.7);
+      /*stroke:rgba(128, 128, 128,.9);*/
+      stroke:#bbb;
       stroke-linejoin: round;
       stroke-linecap: round;
     }
@@ -94,7 +107,9 @@
       fill:rgba(63,63,63,.9);
     }
 
-
+    .band {
+    fill: #ded;
+    }
 
 
 
@@ -117,20 +132,20 @@
       <p class="author">Produced by Jeremy C.F. Lin</p>
     </div>
 
-    <div class="text" id="test" data-trigger="showPop">
-      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+    <div class="text" id="one" data-trigger="showPop">
+      <p>One Scenester tote bag flexitarian fanny pack church-key selfies. Echo park kinfolk plaid etsy pug cray, organic celiac dreamcatcher franzen. Schlitz tumblr ugh XOXO. Craft beer chambray plaid, selfies hoodie try-hard salvia quinoa polaroid jean shorts cliche pinterest neutra lumbersexual butcher.</p>
+      <p>Paleo meh fixie twee try-hard. Kickstarter gentrify chillwave lumbersexual, hoodie drinking vinegar beard shabby chic messenger bag brooklyn vice bespoke banjo tote bag. Pork belly venmo kale chips lo-fi, celiac kombucha hoodie chartreuse hammock shoreditch roof party forage DIY.</p>
+      <!-- <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p> -->
+    </div>
+
+    <div class="text" id="two">
+      <p>Two oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
       <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
       <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
     </div>
 
-    <div class="text">
-      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
-      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
-      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
-    </div>
-
-    <div class="text">
-      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+    <div class="text" id="three">
+      <p>Three oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
       <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
       <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
     </div>
@@ -251,9 +266,15 @@
       // var ratio = Math.round( (1 / animation_height) * 10000 ) / 10000;
       var _that = this;
 
+      var objectTop;
+      var windowBottom;
+
       $(".text").each(function(){
-          var objectTop = $(this).offset().top;
-          var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+          // var objectTop = $(this).offset().top;
+          // var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+          objectTop = $(this).offset().top;
+          windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
           if ( objectTop < windowBottom ) {
             if ( objectTop < windowBottom - animation_height ) {
@@ -276,8 +297,11 @@
 
 
       $(".title").each(function(){
-          var objectTop = $(this).offset().top;
-          var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+          // var objectTop = $(this).offset().top;
+          // var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+          objectTop = $(this).offset().top;
+          windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
           if ( objectTop < windowBottom ) {
             if ( objectTop < windowBottom - animation_height ) {
@@ -303,6 +327,38 @@
         $("#graphic").css( 'background-color', 'rgba(0,0,0,.9)' );
         }
       });
+
+      objectTop = $("#one").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height) {
+        // this.lineChart()
+        this.showAxis()
+        this.showDot()
+        this.showLine()
+      };
+
+
+      objectTop = $("#two").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height) {
+        // this.lineChart()
+        this.CleanLine()
+        // this.ShowChinaLine()
+      } 
+
+      objectTop = $("#two").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height -100) {
+    
+        this.ShowChinaLine()
+      } 
+
+
+
+     
 
       
 
@@ -358,20 +414,24 @@
         .attr("transform", "translate(0," + this.height + ")")
         .call(this.createXAxis()
           .tickSize(-this.height)
-        );
+        )
+        .style("opacity",0);
 
       this.svg.append("g")         // Add the Y Axis
         .attr("class", "y axis grid")
         .call(this.createYAxis()
           .tickSize(-this.width)
         )
+        .style("opacity",0)
         .append("text")
+        .attr("class", "axis_lable")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .style("font-size",10)
-        .text("Million dollar");;
+        .text("Million dollar")
+        .style("opacity",0);
 
       this.svg.append("path")      
         .attr("class", "line") 
@@ -382,7 +442,9 @@
           }
         )))
         // .style("stroke","rgba(158, 75, 108,.7)")
-        .style("stroke","rgba(178,0,0,.5)")
+        // .style("stroke","rgba(178,0,0,.5)")
+        // .style("stroke","#7fc97f")
+        .style("opacity",0);
 
       this.svg.append("path")      
         .attr("class", "line")
@@ -390,7 +452,9 @@
           function(d){
             return d.country == "Total" && d.recipient == "Iran";
           }
-        )));
+        )))
+        // .style("stroke","#beaed4")
+        .style("opacity",0);
 
       this.svg.append("path")      
         .attr("class", "line") 
@@ -399,14 +463,18 @@
             return d.country == "Total" && d.recipient == "North Korea";
           }
         )))
-
+        // .style("stroke","#fdc086")
+        .style("opacity",0);
+       
       this.svg.append("path")      
         .attr("class", "line") 
         .attr("d", this.valueline(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "Myanmar";
           }
-        )));
+        )))
+        // .style("stroke","#ffff99")
+        .style("opacity",0);
 
       this.svg.append("path")      
         .attr("class", "line") 
@@ -414,7 +482,9 @@
           function(d){
             return d.country == "Total" && d.recipient == "Syria";
           }
-        )));
+        )))
+        // .style("stroke","#386cb0")
+        .style("opacity",0);
 
       this.svg.selectAll(".dot")
         .data(this.data.filter(
@@ -426,17 +496,138 @@
         .attr("class", "dot")
         .attr("cx", this.valueline.x())
         .attr("cy", this.valueline.y())
-        .attr("r", 2);
+        .attr("r", 3.5)
+        .style("fill", 
+          function(d){
+            if(d.recipient == "China"){ return "#7fc97f"}
+            else if
+              (d.recipient == "Iran"){ return "#beaed4"}
+            else if
+              (d.recipient == "North Korea"){ return "#fdc086"}
+            else if
+              (d.recipient == "Myanmar"){ return "#ffff99"}
+            else {return "#386cb0"}          
+          })
+        .style("opacity",0);
 
-      
-        // .append("text")
-        // .attr("transform", "rotate(-90)")
-        // .attr("y", 6)
-        // .attr("dy", ".71em")
-        // .style("text-anchor", "end")
-        // .style("font-size",10)
-        // .text("Thousand megawatthours");;
+      // this.svg.style("opacity",0);
 
+        // console.log(this.x.domain)
+
+      // this.svg.append("rect")
+      //   .attr("x", this.x(this.x.domain()[0]))
+      //   .attr("y", this.y(40))
+      //   .attr("width", this.x(this.x.domain()[1]))
+      //   .attr("height", 40)
+      //   .attr("class", "band");
+    },
+
+    showDot: function(){
+      var _that = this;
+
+      this.svg
+        .selectAll(".dot")
+        .transition()
+        .duration(100)
+        .delay(1000)
+        .style("opacity", 1.0);
+
+    },
+
+    showLine: function(){
+      var _that = this;
+
+      this.svg
+        .selectAll(".line")
+        .transition()
+        .duration(100)
+        .delay(1500)
+        .style("opacity", 1.0);
+
+    },
+
+    showAxis: function(){
+      var _that = this;
+
+      this.svg
+        .selectAll(".axis")
+        .transition()
+        .duration(100)
+        .style("opacity", 1.0);
+
+      this.svg
+        .selectAll(".axis_lable")
+        .transition()
+        .duration(100)
+        .delay(500)
+        .style("opacity", 1.0);
+
+    },
+
+    CleanLine: function(){
+      var _that = this;
+
+      this.svg
+        .selectAll(".dot")
+        .transition()
+        .duration(100)
+        .delay(500)
+        .style("opacity", 
+          function(d){
+            if(d.recipient == "China"){ return 1}
+            else if
+              (d.recipient == "Iran"){ return 0.2}
+            else if
+              (d.recipient == "North Korea"){ return 0.2}
+            else if
+              (d.recipient == "Myanmar"){ return 0.2}
+            else {return 0.2}          
+          });
+
+        this.svg
+        .selectAll(".line")
+        .transition()
+        .duration(100)
+        .delay(500)
+        // .style("opacity", 
+        //   function(d){
+        //     if(d.recipient == "China"){ return 1}
+        //     else if
+        //       (d.recipient == "Iran"){ return 0.2}
+        //     else if
+        //       (d.recipient == "North Korea"){ return 0.2}
+        //     else if
+        //       (d.recipient == "Myanmar"){ return 0.2}
+        //     else {return 0.2}          
+        //   });
+        .style("opacity",0)
+        .remove();
+
+        console.log(this.svg)
+
+
+
+    },
+
+    ShowChinaLine: function(){
+      var _that = this;
+
+      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
+      this.y.domain([0, d3.max(this.data, function(d) { return Math.max( d.value); })]);
+
+      this.valueline
+        .x(function(d) { return _that.x(d.year); })
+        .y(function(d) { return _that.y(d.value); });
+
+      this.svg  
+        .selectAll(".line")
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "China";
+          }
+        )))
+        // .style("stroke","#fdc086")
+        .style("opacity",1);
 
     }
 
