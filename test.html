@@ -88,10 +88,7 @@
       /*stroke: #7ea7ba;*/
       /*stroke:rgba(128, 128, 128,.9);*/
       stroke:rgba(56,56,56, .3);
-     /* stroke-linejoin: round;
-      stroke-linecap: round;*/
       stroke-dasharray: 4,4;
-
     }
 
     .axis path,
@@ -122,6 +119,26 @@
     .band {
     fill: #ded;
     }
+
+    /*************/
+    /*************/
+    /*************/
+    /*Area chart*/
+    /*************/
+    /*************/
+    /*************/
+
+    .area {
+      fill: rgba(190, 108, 141, .6);
+    }
+
+    /*************/
+    /*************/
+    /*************/
+    /*Media Query*/
+    /*************/
+    /*************/
+    /*************/
 
     @media (max-width: 600px) {
     .text{
@@ -223,6 +240,7 @@
     parseDate : d3.time.format("%Y").parse,
     // valueline : d3.svg.line().interpolate("step-after"),
     valueline : d3.svg.line(),
+    area      : d3.svg.area(),
 
     // topDistance: null,
     // bottom_of_object: null,
@@ -373,27 +391,23 @@
       };
 
 
-      // objectTop = $("#two").offset().top;
-      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
-      // var dot = $(".dot")
+      objectTop = $("#two").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      var dot = $(".dot")
 
-      // if (objectTop < windowBottom - animation_height) {
+      if (objectTop < windowBottom - animation_height) {
+        this.CleanLine()
+        this.ShowChinaLine()
+      } 
 
-      //   if (){
-      //      this.CleanLine()
-      //   }
-      //   // this.lineChart()
-       
-      //   // this.ShowChinaLine()
-      // } 
+      objectTop = $("#three").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
-      // objectTop = $("#two").offset().top;
-      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      if (objectTop < windowBottom - animation_height) {
+        this.ShowChinaArea()
+      };
 
-      // if (objectTop < windowBottom - animation_height -100) {
-    
-      //   this.ShowChinaLine()
-      // } 
+   
 
 
 
@@ -416,6 +430,7 @@
       });
 
       this.lineChart();
+      this.ChinaArea();
     },
 
 
@@ -474,6 +489,7 @@
 
       this.svg.append("path")      
         .attr("class", "line") 
+        .attr("id", "china") 
         // .attr("d", this.valueline(this.data));   
         .attr("d", this.valueline(this.data.filter(
           function(d){
@@ -487,6 +503,7 @@
 
       this.svg.append("path")      
         .attr("class", "line")
+        .attr("id", "iran") 
         .attr("d", this.valueline(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "Iran";
@@ -496,7 +513,8 @@
         .style("opacity",0);
 
       this.svg.append("path")      
-        .attr("class", "line") 
+        .attr("class", "line")
+        .attr("id", "korea")  
         .attr("d", this.valueline(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "North Korea";
@@ -507,6 +525,7 @@
        
       this.svg.append("path")      
         .attr("class", "line") 
+        .attr("id", "myanmar") 
         .attr("d", this.valueline(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "Myanmar";
@@ -517,6 +536,7 @@
 
       this.svg.append("path")      
         .attr("class", "line") 
+        .attr("id", "syria") 
         .attr("d", this.valueline(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "Syria";
@@ -640,10 +660,9 @@
         //       (d.recipient == "Myanmar"){ return 0.2}
         //     else {return 0.2}          
         //   });
-        .style("opacity",0)
-        .remove();
+        .style("opacity",.1)
 
-        console.log(this.svg)
+        // console.log(this.svg)
 
 
 
@@ -652,23 +671,48 @@
     ShowChinaLine: function(){
       var _that = this;
 
+      this.svg  
+        .select("#china")
+        .transition()
+        .duration(100)
+        .delay(500)
+        .style("opacity",1)
+        // .style("stroke-dasharray", "0,0")
+    },
+
+    ChinaArea: function(){
+      var _that = this;
+
       this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
       this.y.domain([0, d3.max(this.data, function(d) { return Math.max( d.value); })]);
 
-      this.valueline
+      this.area
         .x(function(d) { return _that.x(d.year); })
-        .y(function(d) { return _that.y(d.value); });
+        .y0(this.height)
+        .y1(function(d) { return _that.y(d.value); });
 
-      this.svg  
-        .selectAll(".line")
-        .attr("d", this.valueline(this.data.filter(
+      this.svg.append("path")
+        .datum(this.data.filter(
           function(d){
             return d.country == "Total" && d.recipient == "China";
           }
-        )))
-        // .style("stroke","#fdc086")
-        .style("opacity",1);
+        ))
+        .attr("class", "area")
+        .attr("id", "chinaArea")
+        .attr("d", this.area)
+        .style("opacity",0);
 
+    },
+
+    ShowChinaArea: function(){
+      var _that = this;
+
+      this.svg
+        .select("#chinaArea")
+        .transition()
+        .duration(100)
+        .delay(500)
+        .style("opacity",6);
     }
 
 
