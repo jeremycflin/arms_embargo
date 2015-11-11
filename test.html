@@ -25,12 +25,12 @@
 
     .text{
       font-family: Garamond, Times;
-      font-size: 22px;
+      font-size: 18px;
       line-height: 1.2em;
       margin-bottom: 1000px;
       opacity: 0;
       background-color: rgba(255,255,255,0.85);
-      max-width: 50%;
+      max-width: 43%;
     /*  color:white;*/
     }
 
@@ -40,6 +40,7 @@
       line-height: 1.1em;
       color:white;
       background-color: initial;
+      font-size: 22px;
     }
 
     #one p{
@@ -52,11 +53,20 @@
       font-family: "Libre Baskerville";
     }
 
+    .section_title{
+      font-size: 1.4em;
+      font-family: "Libre Baskerville";
+    }
+
     .author{
       font-family: "Crimson Text";
       font-size: 0.7em;
       line-height: .8em;
       color:#a3a3a3;
+    }
+
+    img{
+      width: 300px;
     }
 
     /*************/
@@ -77,9 +87,11 @@
       stroke-width:1.5px;
       /*stroke: #7ea7ba;*/
       /*stroke:rgba(128, 128, 128,.9);*/
-      stroke:#bbb;
-      stroke-linejoin: round;
-      stroke-linecap: round;
+      stroke:rgba(56,56,56, .3);
+     /* stroke-linejoin: round;
+      stroke-linecap: round;*/
+      stroke-dasharray: 4,4;
+
     }
 
     .axis path,
@@ -111,6 +123,27 @@
     fill: #ded;
     }
 
+    @media (max-width: 600px) {
+    .text{
+      font-size: 12px;
+      max-width: 60%;
+      margin-bottom: 300px;
+    }
+    img{
+      width: 150px;
+    }
+/*    #graphic{
+      position:fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      top:0;
+      left:0;
+      background-color: rgba(0,0,0,.95);
+      font-size: 0.6em;
+    }*/
+  }
+
 
 
 
@@ -139,9 +172,10 @@
     </div>
 
     <div class="text" id="two">
-      <p>Two oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
-      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
-      <p>oi  hieouhaop  sihejoajs   oeijoahsseaser  ewrsreaserse  o;ihseserstae</p>
+      <h2 class="section_title">China</h2>
+      <p>One Scenester tote bag flexitarian fanny pack church-key selfies. Echo park kinfolk plaid etsy pug cray, organic celiac dreamcatcher franzen. Schlitz tumblr ugh XOXO. Craft beer chambray plaid, selfies hoodie try-hard salvia quinoa polaroid jean shorts cliche pinterest neutra lumbersexual butcher.</p>
+      <center><img src="assets/china.png"></center>
+      <p>Paleo meh fixie twee try-hard. Kickstarter gentrify chillwave lumbersexual, hoodie drinking vinegar beard shabby chic messenger bag brooklyn vice bespoke banjo tote bag. Pork belly venmo kale chips lo-fi, celiac kombucha hoodie chartreuse hammock shoreditch roof party forage DIY.</p>
     </div>
 
     <div class="text" id="three">
@@ -339,22 +373,27 @@
       };
 
 
-      objectTop = $("#two").offset().top;
-      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      // objectTop = $("#two").offset().top;
+      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      // var dot = $(".dot")
 
-      if (objectTop < windowBottom - animation_height) {
-        // this.lineChart()
-        this.CleanLine()
-        // this.ShowChinaLine()
-      } 
+      // if (objectTop < windowBottom - animation_height) {
 
-      objectTop = $("#two").offset().top;
-      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      //   if (){
+      //      this.CleanLine()
+      //   }
+      //   // this.lineChart()
+       
+      //   // this.ShowChinaLine()
+      // } 
 
-      if (objectTop < windowBottom - animation_height -100) {
+      // objectTop = $("#two").offset().top;
+      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      // if (objectTop < windowBottom - animation_height -100) {
     
-        this.ShowChinaLine()
-      } 
+      //   this.ShowChinaLine()
+      // } 
 
 
 
@@ -496,17 +535,18 @@
         .attr("class", "dot")
         .attr("cx", this.valueline.x())
         .attr("cy", this.valueline.y())
-        .attr("r", 3.5)
+        // .attr("r", 3.5)
+        .attr("r", 3)
         .style("fill", 
           function(d){
-            if(d.recipient == "China"){ return "#7fc97f"}
+            if(d.recipient == "China"){ return "rgb(190, 108, 141)"}
             else if
-              (d.recipient == "Iran"){ return "#beaed4"}
+              (d.recipient == "Iran"){ return "rgb(127, 164, 206)"}
             else if
-              (d.recipient == "North Korea"){ return "#fdc086"}
+              (d.recipient == "North Korea"){ return "rgb(186, 215, 46)"}
             else if
-              (d.recipient == "Myanmar"){ return "#ffff99"}
-            else {return "#386cb0"}          
+              (d.recipient == "Myanmar"){ return "rgb(253, 193, 48)"}
+            else {return "rgb(157,91,48)"}          
           })
         .style("opacity",0);
 
