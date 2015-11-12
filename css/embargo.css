@@ -1,0 +1,161 @@
+.container{
+      position: relative;
+      z-index: 10;
+    }
+
+    #graphic{
+      position:fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      top:0;
+      left:0;
+      background-color: rgba(0,0,0,.95);
+      font-size: 0.6em;
+    }
+
+    .text{
+      font-family: Garamond, Times;
+      font-size: 18px;
+      line-height: 1.2em;
+      margin-bottom: 1000px;
+      opacity: 0;
+      background-color: rgba(255,255,255,0.85);
+      max-width: 43%;
+    /*  color:white;*/
+    }
+
+    .title{
+      margin-top: 400px;
+      opacity: 1;
+      line-height: 1.1em;
+      color:white;
+      background-color: initial;
+      font-size: 22px;
+    }
+
+    #one p{
+      margin-top: 30px;
+    }
+
+    .title h1{
+      font-size: 1.6em;
+      /*font-family: "Crimson Text";*/
+      font-family: "Libre Baskerville";
+    }
+
+    .section_title{
+      font-size: 1.4em;
+      font-family: "Libre Baskerville";
+    }
+
+    .author{
+      font-family: "Crimson Text";
+      font-size: 0.7em;
+      line-height: .8em;
+      color:#a3a3a3;
+    }
+
+    img{
+      width: 300px;
+    }
+
+    /*************/
+    /*************/
+    /*************/
+    /*Line chart*/
+    /*************/
+    /*************/
+    /*************/
+
+    path { 
+      stroke: #;
+      stroke-width: ;
+      fill: none;
+    }
+
+    .line{
+      stroke-width:1.5px;
+      /*stroke: #7ea7ba;*/
+      /*stroke:rgba(128, 128, 128,.9);*/
+      stroke:rgba(56,56,56, .8);
+      stroke-dasharray: 4,4;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #eee;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+
+    .grid path{
+      stroke-width:0;
+    }
+
+    .grid .tick{
+      /*stroke:white;*/
+      stroke-width:1.5px;
+      stroke-opacity:0.9;
+      shape-rendering: crispEdges;
+    }
+
+    .dot{
+      stroke-width:1;
+      /*stroke:none;*/
+      stroke: black;
+      /*fill:rgba(63,63,63,.9);*/
+    }
+
+    .band {
+    fill: #ded;
+    }
+
+    /*************/
+    /*************/
+    /*************/
+    /*Area chart*/
+    /*************/
+    /*************/
+    /*************/
+
+    #chinaArea {
+      fill: rgba(190, 108, 141, .6);
+    }
+
+    /*************/
+    /*************/
+    /*************/
+    /*Media Query*/
+    /*************/
+    /*************/
+    /*************/
+
+    @media (max-width: 600px) {
+    .text{
+      font-size: 12px;
+      max-width: 60%;
+      margin-bottom: 300px;
+    }
+    img{
+      width: 150px;
+    }
+/*    #graphic{
+      position:fixed;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      top:0;
+      left:0;
+      background-color: rgba(0,0,0,.95);
+      font-size: 0.6em;
+    }*/
+  }
+
+
+
+
+
+
+
