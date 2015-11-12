@@ -87,7 +87,7 @@
       stroke-width:1.5px;
       /*stroke: #7ea7ba;*/
       /*stroke:rgba(128, 128, 128,.9);*/
-      stroke:rgba(56,56,56, .3);
+      stroke:rgba(56,56,56, .8);
       stroke-dasharray: 4,4;
     }
 
@@ -112,8 +112,9 @@
 
     .dot{
       stroke-width:1;
-      stroke:none;
-      fill:rgba(63,63,63,.9);
+      /*stroke:none;*/
+      stroke: black;
+      /*fill:rgba(63,63,63,.9);*/
     }
 
     .band {
@@ -128,7 +129,7 @@
     /*************/
     /*************/
 
-    .area {
+    #chinaArea {
       fill: rgba(190, 108, 141, .6);
     }
 
@@ -177,8 +178,8 @@
 
     <div class="text title" data-trigger="showPop">
       <h1>Are Arms Embargos Really Effective?</h1>
-      <p>oihieouh  aopsihej   oajsoeijoah   sseaserewrs  reaserseo;ihae</p>
-      <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p>
+      <p>A cloer look into arms transfers, embargos</p>
+     <!--  <p>oih  ieouhaop  sihejoajso   eijoahs  eo;ihae</p> -->
       <p class="author">Produced by Jeremy C.F. Lin</p>
     </div>
 
@@ -222,7 +223,7 @@
 
   //   })
 
-  var linScroller = {
+  var Scroller = {
 
     svg       : {},
     // width     : window.innerWidth,
@@ -241,6 +242,7 @@
     // valueline : d3.svg.line().interpolate("step-after"),
     valueline : d3.svg.line(),
     area      : d3.svg.area(),
+    stack     : d3.layout.stack(),
 
     // topDistance: null,
     // bottom_of_object: null,
@@ -605,6 +607,13 @@
         .delay(1500)
         .style("opacity", 1.0);
 
+      // this.svg
+      //   .select("#chinaArea")
+      //   .transition()
+      //   .duration(100)
+      //   .delay(1500)
+      //   .style("opacity", 0);
+
     },
 
     showAxis: function(){
@@ -637,12 +646,12 @@
           function(d){
             if(d.recipient == "China"){ return 1}
             else if
-              (d.recipient == "Iran"){ return 0.2}
+              (d.recipient == "Iran"){ return 0.1}
             else if
-              (d.recipient == "North Korea"){ return 0.2}
+              (d.recipient == "North Korea"){ return 0.1}
             else if
-              (d.recipient == "Myanmar"){ return 0.2}
-            else {return 0.2}          
+              (d.recipient == "Myanmar"){ return 0.1}
+            else {return 0.1}          
           });
 
         this.svg
@@ -661,7 +670,7 @@
         //       (d.recipient == "Myanmar"){ return 0.2}
         //     else {return 0.2}          
         //   });
-        .style("opacity",.1)
+        .style("opacity",0.1)
 
         // console.log(this.svg)
 
@@ -714,7 +723,17 @@
         .duration(100)
         .delay(1500)
         .style("opacity",6);
-    }
+    },
+
+    // stack: function(){
+    //   var _that = this;
+
+      
+
+    //   this.stack
+    //     .values(function(d) { return d.values; });
+
+    // }
 
 
  
@@ -752,7 +771,7 @@
 
   };
 
-  linScroller.init();
+  Scroller.init();
 
 
 </script>
