@@ -278,19 +278,23 @@
         .text("Million dollar")
         .style("opacity",0);
 
+      // this.svg.append("path")      
+      //   .attr("class", "line") 
+      //   .attr("id", "china") 
+      //   // .attr("d", this.valueline(this.data));   
+      //   .attr("d", this.valueline(this.data.filter(
+      //     function(d){
+      //       return d.country == "Total" && d.recipient == "China";
+      //     }
+      //   )))
+      //   .style("opacity",0);
+
       this.svg.append("path")      
         .attr("class", "line") 
         .attr("id", "china") 
-        // .attr("d", this.valueline(this.data));   
-        .attr("d", this.valueline(this.data.filter(
-          function(d){
-            return d.country == "Total" && d.recipient == "China";
-          }
-        )))
-        // .style("stroke","rgba(158, 75, 108,.7)")
-        // .style("stroke","rgba(178,0,0,.5)")
-        // .style("stroke","#7fc97f")
-        .style("opacity",0);
+        // .attr("d", this.valueline(this.data));
+        .attr("d", "M0," + this.height + "L0," + this.width)   
+        ;
 
       this.svg.append("path")      
         .attr("class", "line")
@@ -469,13 +473,26 @@
     ShowChinaLine: function(){
       var _that = this;
 
+      // this.svg  
+      //   .select("#china")
+      //   .transition()
+      //   .duration(100)
+      //   .delay(500)
+      //   .style("opacity",1)
+        // .style("stroke-dasharray", "0,0")
+
       this.svg  
         .select("#china")
         .transition()
-        .duration(100)
-        .delay(500)
-        .style("opacity",1)
-        // .style("stroke-dasharray", "0,0")
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "China";
+          }
+        )))
+        .duration(2200)
+        .delay(100)
+        .style("opacity",1)  
+
     },
 
     ChinaArea: function(){
@@ -555,7 +572,9 @@
     // }
 
 
-
+    // .attr("d", "M0," + height + "L0," + width)
+    // .transition()
+    // .attr("d", function(d){return path generator})
 
   };
 
