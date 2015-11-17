@@ -24,6 +24,7 @@
 
     x         : d3.time.scale(),
     y         : d3.scale.linear(),
+    z         : d3.scale.category20c(),
     xAxis     : d3.svg.axis(),
     yAxis     : d3.svg.axis(),
     parseDate : d3.time.format("%Y").parse,
@@ -31,6 +32,7 @@
     valueline : d3.svg.line(),
     area      : d3.svg.area(),
     stack     : d3.layout.stack(),
+
 
     // topDistance: null,
     // bottom_of_object: null,
@@ -222,6 +224,7 @@
 
       this.lineChart();
       this.ChinaArea();
+      this.ShowStack();
     },
 
 
@@ -278,23 +281,23 @@
         .text("Million dollar")
         .style("opacity",0);
 
-      // this.svg.append("path")      
-      //   .attr("class", "line") 
-      //   .attr("id", "china") 
-      //   // .attr("d", this.valueline(this.data));   
-      //   .attr("d", this.valueline(this.data.filter(
-      //     function(d){
-      //       return d.country == "Total" && d.recipient == "China";
-      //     }
-      //   )))
-      //   .style("opacity",0);
-
       this.svg.append("path")      
         .attr("class", "line") 
         .attr("id", "china") 
-        // .attr("d", this.valueline(this.data));
-        .attr("d", "M0," + this.height + "L0," + this.width)   
-        ;
+        // .attr("d", this.valueline(this.data));   
+        .attr("d", this.valueline(this.data.filter(
+          function(d){
+            return d.country == "Total" && d.recipient == "China";
+          }
+        )))
+        .style("opacity",0);
+
+      // this.svg.append("path")      
+      //   .attr("class", "line") 
+      //   .attr("id", "china") 
+      //   // .attr("d", this.valueline(this.data));
+      //   .attr("d", "M0," + this.height + "L0," + this.width)   
+      //   ;
 
       this.svg.append("path")      
         .attr("class", "line")
@@ -473,25 +476,25 @@
     ShowChinaLine: function(){
       var _that = this;
 
-      // this.svg  
-      //   .select("#china")
-      //   .transition()
-      //   .duration(100)
-      //   .delay(500)
-      //   .style("opacity",1)
-        // .style("stroke-dasharray", "0,0")
-
       this.svg  
         .select("#china")
         .transition()
-        .attr("d", this.valueline(this.data.filter(
-          function(d){
-            return d.country == "Total" && d.recipient == "China";
-          }
-        )))
-        .duration(2200)
-        .delay(100)
-        .style("opacity",1)  
+        .duration(100)
+        .delay(500)
+        .style("opacity",1)
+        .style("stroke-dasharray", "0,0")
+
+      // this.svg  
+      //   .select("#china")
+      //   .transition()
+      //   .attr("d", this.valueline(this.data.filter(
+      //     function(d){
+      //       return d.country == "Total" && d.recipient == "China";
+      //     }
+      //   )))
+      //   .duration(2200)
+      //   .delay(100)
+      //   .style("opacity",1)  
 
     },
 
@@ -530,15 +533,38 @@
         .style("opacity",6);
     },
 
-    // stack: function(){
-    //   var _that = this;
+    ShowStack: function(){
+      var _that = this;
 
-      
+      this.stack
+        .offset("zero")
+        .values(function(d) { return d.values; })
+        .x(function(d) { return d.year; })
+        .y(function(d) { return d.value; });
 
-    //   this.stack
-    //     .values(function(d) { return d.values; });
+      var nest = d3.nest()
+        .key(function(d) { return d.country; });
 
-    // }
+      this.area
+        .x(function(d) { return _that.x(d.year); })
+        .y0(function(d) { return _that.y(d.y0); })
+        .y1(function(d) { return _that.y(d.y0 + d.y); });
+
+      var layers = this.stack(nest.entries(this.data.filter(
+        function(d){return d.country !== "Total" && d.recipient == "China";}
+        )));
+
+      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
+      this.y.domain([0, d3.max(this.data, function(d) { return d.y0 + d.y; })]);
+
+      this.svg.selectAll(".layer")
+        .data(layers)
+        .enter().append("path")
+        .attr("class", "layer")
+        .attr("d", function(d) { return _that.area(d.values); })
+        .style("fill", function(d, i) { return _that.z(i); });
+
+    }
 
 
  
