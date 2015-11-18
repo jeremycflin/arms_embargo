@@ -13,25 +13,30 @@
 
   var Scroller = {
 
-    svg       : {},
+    svg         : {},
     // width     : window.innerWidth,
     // height    : window.innerHeight,
-    width     : 900,
-    height    : 500,
-    margin    : {top: 10, right: 30, bottom: 30, left: 50},
+    width       : 900,
+    height      : 500,
+    margin      : {top: 10, right: 30, bottom: 30, left: 50},
 
-    data      : {},
+    data        : {},
 
-    x         : d3.time.scale(),
-    y         : d3.scale.linear(),
-    z         : d3.scale.category20c(),
-    xAxis     : d3.svg.axis(),
-    yAxis     : d3.svg.axis(),
-    parseDate : d3.time.format("%Y").parse,
+    x           : d3.time.scale(),
+    y           : d3.scale.linear(),
+    z           : d3.scale.category20c(),
+    xAxis       : d3.svg.axis(),
+    yAxis       : d3.svg.axis(),
+    parseDate   : d3.time.format("%Y").parse,
     // valueline : d3.svg.line().interpolate("step-after"),
-    valueline : d3.svg.line(),
-    area      : d3.svg.area(),
-    stack     : d3.layout.stack(),
+    valueline   : d3.svg.line(),
+    area        : d3.svg.area(),
+    stack       : d3.layout.stack(),
+    // chinaEmbargo: d3.range(25).map(function(d){return new Date((d+1989).toString())}),
+    // chinaEmbargo: [1989, 1990, 1991, 1992, 1993, 1994, 1995, 
+    //               1996, 1997, 1998, 1999, 2000, 2001, 2002,
+    //               2003, 2004, 2005, 2006, 2007, 2008, 2009,
+    //               2010, 2011, 2012, 2013, 2014],
 
 
     // topDistance: null,
@@ -191,6 +196,8 @@
         this.CleanLine()
         this.ShowChinaLine()
         this.ShowChinaArea()
+        this.ShowStack()
+        this.ShowEmbargo()
       } 
 
       // objectTop = $("#three").offset().top;
@@ -224,7 +231,6 @@
 
       this.lineChart();
       this.ChinaArea();
-      this.ShowStack();
     },
 
 
@@ -232,7 +238,7 @@
       return d3.svg.axis()
         .scale(this.x)
         .orient("bottom")
-        .ticks(10)
+        .ticks(20)
     },
 
     createYAxis: function(){
@@ -558,11 +564,52 @@
       this.y.domain([0, d3.max(this.data, function(d) { return d.y0 + d.y; })]);
 
       this.svg.selectAll(".layer")
+        // .transition()
         .data(layers)
         .enter().append("path")
         .attr("class", "layer")
         .attr("d", function(d) { return _that.area(d.values); })
         .style("fill", function(d, i) { return _that.z(i); });
+
+    },
+
+    ShowEmbargo: function(){
+      var _that = this;
+
+
+
+      // this.y.domain([this.y(1989), d3.max(this.chinaEmbargo)]).range([0, this.width], .1)
+      this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
+
+      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
+
+      this.svg.append("rect")
+          .attr("x", this.x(new Date("1989")))
+          .attr("y", 0)
+          .attr("width", barWidth)
+          .attr("height", this.height)
+          .attr("class", "band")
+          // .style("fill","black")
+          .style("opacity", 0.03);
+
+
+      // this.svg.selectAll("rect")      
+      //   .data(this.chinaEmbargo)
+      //   .enter()
+      //   .append("rect")
+      //   .attr("x", function(d){
+      //     return _that.x(d);
+      //   })
+      //   // .attr("x",function(d){
+      //   //   return _that.y(d);
+      //   // })
+      //   .attr("y", 0)
+      //   .attr("width", barWidth/(this.chinaEmbargo.length-1))
+      //   // .attr("width", this.y.range())
+      //   .attr("height", this.height)
+      //   .style("fill","black")
+      //   .style("opacity", 0.3)
+
 
     }
 
