@@ -163,7 +163,7 @@
 
               $(".title").css( {
                 transition: 'color 1.7s linear',
-                'color': 'rgba(0,0,0,.3)'
+                'color': 'rgba(0,0,0,.8)'
               });
           } else {
             $("#graphic").css( {
