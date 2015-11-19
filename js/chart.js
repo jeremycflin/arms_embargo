@@ -24,14 +24,16 @@
 
     x           : d3.time.scale(),
     y           : d3.scale.linear(),
-    z           : d3.scale.category20c(),
+    // z           : d3.scale.category20c(),
+    // z           : d3.scale.category20(),
     xAxis       : d3.svg.axis(),
     yAxis       : d3.svg.axis(),
     parseDate   : d3.time.format("%Y").parse,
-    // valueline : d3.svg.line().interpolate("step-after"),
-    valueline   : d3.svg.line(),
-    area        : d3.svg.area(),
+    valueline : d3.svg.line().interpolate("cardinal"),
+    // valueline   : d3.svg.line(),
+    area        : d3.svg.area().interpolate("cardinal"),
     stack       : d3.layout.stack(),
+    // colorArray  : ["#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8"],
     // chinaEmbargo: d3.range(25).map(function(d){return new Date((d+1989).toString())}),
     // chinaEmbargo: [1989, 1990, 1991, 1992, 1993, 1994, 1995, 
     //               1996, 1997, 1998, 1999, 2000, 2001, 2002,
@@ -161,7 +163,7 @@
 
               $(".title").css( {
                 transition: 'color 1.7s linear',
-                'color': 'rgba(0,0,0,.8)'
+                'color': 'rgba(0,0,0,.3)'
               });
           } else {
             $("#graphic").css( {
@@ -195,7 +197,7 @@
       if (objectTop < windowBottom - animation_height) {
         this.CleanLine()
         this.ShowChinaLine()
-        this.ShowChinaArea()
+        // this.ShowChinaArea()
         this.ShowStack()
         this.ShowEmbargo()
       } 
@@ -556,7 +558,7 @@
         .y0(function(d) { return _that.y(d.y0); })
         .y1(function(d) { return _that.y(d.y0 + d.y); });
 
-      var layers = this.stack(nest.entries(this.data.filter(
+      var layers = this.stack(nest.entries(_that.data.filter(
         function(d){return d.country !== "Total" && d.recipient == "China";}
         )));
 
@@ -569,29 +571,55 @@
         .enter().append("path")
         .attr("class", "layer")
         .attr("d", function(d) { return _that.area(d.values); })
-        .style("fill", function(d, i) { return _that.z(i); });
+        // .style("fill", function(d, i) { return _that.z(i); });
+        // .style("fill", function(d, i) { return _that.colorArray[i]; });
+        .style("fill", 
+          function(d){
+            if(d.key == "France"){ return "rgb(190, 108, 141)"}
+            else if
+              (d.key == "Italy"){ return "rgb(127, 164, 206)"}
+            else if
+              (d.key == "United Kingdom"){ return "rgb(186, 215, 46)"}
+            else if
+              (d.key == "Switzerland"){ return "rgb(253, 193, 48)"}
+            else if
+              (d.key == "Germany (FRG)"){ return "rgb(253, 193, 48)"}
+            else {return "#e9e9e9"}          
+          });
+
+        // console.log(layers)
+
 
     },
 
     ShowEmbargo: function(){
       var _that = this;
 
-
-
       // this.y.domain([this.y(1989), d3.max(this.chinaEmbargo)]).range([0, this.width], .1)
       this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
 
       var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
 
-      this.svg.append("rect")
-          .attr("x", this.x(new Date("1989")))
-          .attr("y", 0)
-          .attr("width", barWidth)
-          .attr("height", this.height)
-          .attr("class", "band")
-          // .style("fill","black")
-          .style("opacity", 0.03);
+      // this.svg.append("rect")
+      //     .attr("x", this.x(new Date("1989")))
+      //     .attr("y", 0)
+      //     .attr("width", barWidth)
+      //     .attr("height", this.height)
+      //     .attr("class", "band")
+      //     .style("opacity", 0.03);
 
+      this.svg.append("rect")
+        .attr("x", this.x(new Date("1989")))
+        .attr("y", 0)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "band")
+        .style("opacity", 0.05);
+
+      this.svg.selectAll(".band")
+        .transition()
+        .duration(2000)
+        .attr("height", this.height);
 
       // this.svg.selectAll("rect")      
       //   .data(this.chinaEmbargo)
