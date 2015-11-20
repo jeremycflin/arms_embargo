@@ -29,10 +29,14 @@
     xAxis       : d3.svg.axis(),
     yAxis       : d3.svg.axis(),
     parseDate   : d3.time.format("%Y").parse,
-    valueline : d3.svg.line().interpolate("cardinal"),
+    // valueline : d3.svg.line().interpolate("cardinal"),
+    valueline : d3.svg.line().interpolate("basis"),
     // valueline   : d3.svg.line(),
-    area        : d3.svg.area().interpolate("cardinal"),
+    area        : d3.svg.area().interpolate("basis"),
     stack       : d3.layout.stack(),
+    path        : document.querySelector('.line path'),
+    
+
     // colorArray  : ["#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8"],
     // chinaEmbargo: d3.range(25).map(function(d){return new Date((d+1989).toString())}),
     // chinaEmbargo: [1989, 1990, 1991, 1992, 1993, 1994, 1995, 
@@ -184,9 +188,12 @@
 
       if (objectTop < windowBottom - animation_height) {
         // this.lineChart()
+        this.ShowEmbargo()
         this.showAxis()
         this.showDot()
         this.showLine()
+        this.ShowChinaLine()
+       
       };
 
 
@@ -196,10 +203,11 @@
 
       if (objectTop < windowBottom - animation_height) {
         this.CleanLine()
-        this.ShowChinaLine()
+        // this.ShowChinaLine()
         // this.ShowChinaArea()
         this.ShowStack()
-        this.ShowEmbargo()
+        this.ShowChinaEmbargo()
+        
       } 
 
       // objectTop = $("#three").offset().top;
@@ -250,9 +258,63 @@
         .ticks(6)
     },
 
-    lineChart: function(){
+    ShowEmbargo: function(){
       var _that = this;
 
+      // this.y.domain([this.y(1989), d3.max(this.chinaEmbargo)]).range([0, this.width], .1)
+      this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
+
+      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
+
+     
+
+      this.svg.append("rect")
+        .attr("x", this.x(new Date("1989")))
+        .attr("y", 0)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "band")
+        .style("opacity", 0.05);
+
+      // this.svg.selectAll(".band")
+      //   .transition()
+      //   .duration(2000)
+      //   .attr("height", this.height);
+
+
+
+
+
+      // this.svg.append("rect")
+      //     .attr("x", this.x(new Date("1989")))
+      //     .attr("y", 0)
+      //     .attr("width", barWidth)
+      //     .attr("height", this.height)
+      //     .attr("class", "band")
+      //     .style("opacity", 0.03);
+
+      // this.svg.selectAll("rect")      
+      //   .data(this.chinaEmbargo)
+      //   .enter()
+      //   .append("rect")
+      //   .attr("x", function(d){
+      //     return _that.x(d);
+      //   })
+      //   // .attr("x",function(d){
+      //   //   return _that.y(d);
+      //   // })
+      //   .attr("y", 0)
+      //   .attr("width", barWidth/(this.chinaEmbargo.length-1))
+      //   // .attr("width", this.y.range())
+      //   .attr("height", this.height)
+      //   .style("fill","black")
+      //   .style("opacity", 0.3)
+
+
+    },
+
+    lineChart: function(){
+      var _that = this;
       // this.svg = svg;
 
       this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
@@ -298,14 +360,9 @@
             return d.country == "Total" && d.recipient == "China";
           }
         )))
-        .style("opacity",0);
+ 
 
-      // this.svg.append("path")      
-      //   .attr("class", "line") 
-      //   .attr("id", "china") 
-      //   // .attr("d", this.valueline(this.data));
-      //   .attr("d", "M0," + this.height + "L0," + this.width)   
-      //   ;
+
 
       this.svg.append("path")      
         .attr("class", "line")
@@ -315,8 +372,9 @@
             return d.country == "Total" && d.recipient == "Iran";
           }
         )))
-        // .style("stroke","#beaed4")
-        .style("opacity",0);
+        // .style("opacity",0);
+
+       
 
       this.svg.append("path")      
         .attr("class", "line")
@@ -326,8 +384,7 @@
             return d.country == "Total" && d.recipient == "North Korea";
           }
         )))
-        // .style("stroke","#fdc086")
-        .style("opacity",0);
+        // .style("opacity",0);
        
       this.svg.append("path")      
         .attr("class", "line") 
@@ -337,8 +394,7 @@
             return d.country == "Total" && d.recipient == "Myanmar";
           }
         )))
-        // .style("stroke","#ffff99")
-        .style("opacity",0);
+        // .style("opacity",0);
 
       this.svg.append("path")      
         .attr("class", "line") 
@@ -348,33 +404,40 @@
             return d.country == "Total" && d.recipient == "Syria";
           }
         )))
-        // .style("stroke","#386cb0")
-        .style("opacity",0);
+        // .style("opacity",0);
 
-      this.svg.selectAll(".dot")
-        .data(this.data.filter(
-          function(d){
-            return d.country == "Total";
-          }
-        ))
-        .enter().append("circle")
-        .attr("class", "dot")
-        .attr("cx", this.valueline.x())
-        .attr("cy", this.valueline.y())
-        // .attr("r", 3.5)
-        .attr("r", 3)
-        .style("fill", 
-          function(d){
-            if(d.recipient == "China"){ return "rgb(190, 108, 141)"}
-            else if
-              (d.recipient == "Iran"){ return "rgb(127, 164, 206)"}
-            else if
-              (d.recipient == "North Korea"){ return "rgb(186, 215, 46)"}
-            else if
-              (d.recipient == "Myanmar"){ return "rgb(253, 193, 48)"}
-            else {return "rgb(157,91,48)"}          
-          })
-        .style("opacity",0);
+      // this.svg.append("text")
+      // .attr("transform", function(d) { return "translate(" + (_that.x(d.values[0]) + 20) + "," + (_that.y(d.values[0]) ) + ")"; })
+      // .attr("x", 8)
+      // .attr("dy", ".31em")
+      // .attr("id","label")
+      // .style("cursor","pointer")
+      // .text(function(d) { return d.name; });
+
+
+      // this.svg.selectAll(".dot")
+      //   .data(this.data.filter(
+      //     function(d){
+      //       return d.country == "Total";
+      //     }
+      //   ))
+      //   .enter().append("circle")
+      //   .attr("class", "dot")
+      //   .attr("cx", this.valueline.x())
+      //   .attr("cy", this.valueline.y())
+      //   .attr("r", 3)
+      //   .style("fill", 
+      //     function(d){
+      //       if(d.recipient == "China"){ return "rgb(190, 108, 141)"}
+      //       else if
+      //         (d.recipient == "Iran"){ return "rgb(127, 164, 206)"}
+      //       else if
+      //         (d.recipient == "North Korea"){ return "rgb(186, 215, 46)"}
+      //       else if
+      //         (d.recipient == "Myanmar"){ return "rgb(253, 193, 48)"}
+      //       else {return "rgb(157,91,48)"}          
+      //     })
+      //   .style("opacity",0);
 
       // this.svg.style("opacity",0);
 
@@ -409,6 +472,14 @@
         .duration(100)
         .delay(1500)
         .style("opacity", 1.0);
+
+      this.svg
+        .selectAll(".line")
+        .transition()
+        .duration(100)
+        .ease("linear")
+        .attr("stroke-dashoffset", 0);
+
 
       // this.svg
       //   .select("#chinaArea")
@@ -449,12 +520,12 @@
           function(d){
             if(d.recipient == "China"){ return 1}
             else if
-              (d.recipient == "Iran"){ return 0.1}
+              (d.recipient == "Iran"){ return 0}
             else if
-              (d.recipient == "North Korea"){ return 0.1}
+              (d.recipient == "North Korea"){ return 0}
             else if
-              (d.recipient == "Myanmar"){ return 0.1}
-            else {return 0.1}          
+              (d.recipient == "Myanmar"){ return 0}
+            else {return 0}          
           });
 
         this.svg
@@ -473,7 +544,7 @@
         //       (d.recipient == "Myanmar"){ return 0.2}
         //     else {return 0.2}          
         //   });
-        .style("opacity",0.1)
+        .style("opacity",0)
 
         // console.log(this.svg)
 
@@ -485,12 +556,20 @@
       var _that = this;
 
       this.svg  
-        .select("#china")
+        .selectAll(".line")
         .transition()
-        .duration(100)
-        .delay(500)
-        .style("opacity",1)
-        .style("stroke-dasharray", "0,0")
+        .duration(29000)
+        // .delay(500)
+        .ease("linear")
+        .style("stroke-dashoffset", 0);
+
+      this.svg  
+        .selectAll("#china")
+        .transition()
+        .duration(18000)
+        // .delay(500)
+        .ease("linear")
+        .style("stroke-dashoffset", 0);
 
       // this.svg  
       //   .select("#china")
@@ -573,72 +652,42 @@
         .attr("d", function(d) { return _that.area(d.values); })
         // .style("fill", function(d, i) { return _that.z(i); });
         // .style("fill", function(d, i) { return _that.colorArray[i]; });
+        .style("fill", "white")
+        // .style("opacity", .3)
+        .transition()
+        .duration(600)
+        .ease("linear")
         .style("fill", 
           function(d){
-            if(d.key == "France"){ return "rgb(190, 108, 141)"}
+            if(d.key == "France"){ return "#d8a7ba"}
             else if
-              (d.key == "Italy"){ return "rgb(127, 164, 206)"}
+              (d.key == "Italy"){ return "#c8839f"}
             else if
-              (d.key == "United Kingdom"){ return "rgb(186, 215, 46)"}
+              (d.key == "United Kingdom"){ return "#be6c8d"}
+            // else if
+            //   (d.key == "Switzerland"){ return "#b14e76"}
             else if
-              (d.key == "Switzerland"){ return "rgb(253, 193, 48)"}
-            else if
-              (d.key == "Germany (FRG)"){ return "rgb(253, 193, 48)"}
-            else {return "#e9e9e9"}          
-          });
+              (d.key == "Germany (FRG)"){ return "#8d3f5e"}
+            else {return "rgba(172, 167, 167, .5)"}          
+          })
+        // .style("opacity",1)
 
-        // console.log(layers)
-
-
+        this.svg  
+          .selectAll(".line")
+          .transition()
+          .duration(300)
+          .ease("linear")
+          .style("opacity", 0);
     },
 
-    ShowEmbargo: function(){
+
+    ShowChinaEmbargo: function(){
       var _that = this;
 
-      // this.y.domain([this.y(1989), d3.max(this.chinaEmbargo)]).range([0, this.width], .1)
-      this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
-
-      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
-
-      // this.svg.append("rect")
-      //     .attr("x", this.x(new Date("1989")))
-      //     .attr("y", 0)
-      //     .attr("width", barWidth)
-      //     .attr("height", this.height)
-      //     .attr("class", "band")
-      //     .style("opacity", 0.03);
-
-      this.svg.append("rect")
-        .attr("x", this.x(new Date("1989")))
-        .attr("y", 0)
-        .attr("width", barWidth)
-        .attr("height", 0)
-        .attr("class", "band")
-        .style("opacity", 0.05);
-
-      this.svg.selectAll(".band")
-        .transition()
-        .duration(2000)
-        .attr("height", this.height);
-
-      // this.svg.selectAll("rect")      
-      //   .data(this.chinaEmbargo)
-      //   .enter()
-      //   .append("rect")
-      //   .attr("x", function(d){
-      //     return _that.x(d);
-      //   })
-      //   // .attr("x",function(d){
-      //   //   return _that.y(d);
-      //   // })
-      //   .attr("y", 0)
-      //   .attr("width", barWidth/(this.chinaEmbargo.length-1))
-      //   // .attr("width", this.y.range())
-      //   .attr("height", this.height)
-      //   .style("fill","black")
-      //   .style("opacity", 0.3)
-
-
+      // this.svg.selectAll(".band")
+      //   .transition()
+      //   .duration(2000)
+      //   .attr("height", this.height);
     }
 
 
