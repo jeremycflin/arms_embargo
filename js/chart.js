@@ -24,8 +24,6 @@
 
     x           : d3.time.scale(),
     y           : d3.scale.linear(),
-    // z           : d3.scale.category20c(),
-    // z           : d3.scale.category20(),
     xAxis       : d3.svg.axis(),
     yAxis       : d3.svg.axis(),
     parseDate   : d3.time.format("%Y").parse,
@@ -189,11 +187,11 @@
 
       if (objectTop < windowBottom - animation_height) {
         // this.lineChart()
-        this.ShowEmbargo();
+        this.DrawEmbargo();
         this.showAxis();
-        this.showDot();
-        this.showLine();
-        this.ShowChinaLine();
+        // this.showDot();
+        // this.showLine();
+        this.ShowAllLines();
        
       };
 
@@ -206,9 +204,7 @@
         // this.ShowChinaLine()
         // this.ShowChinaArea()
         this.ShowChinaStack();
-        this.ShowStacked();
-        
-        
+        // this.ShowStacked();
       } 
 
       objectTop = $("#three").offset().top;
@@ -216,6 +212,14 @@
 
       if (objectTop < windowBottom - animation_height) {
         this.ShowChinaEmbargo();
+      } 
+
+      objectTop = $("#four").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height) {
+        this.cleanChinaStacked();
+        // this.CleanChinaEmbargo();
         
       } 
 
@@ -267,7 +271,7 @@
         .ticks(6)
     },
 
-    ShowEmbargo: function(){
+    DrawEmbargo: function(){
       var _that = this;
 
       // this.y.domain([this.y(1989), d3.max(this.chinaEmbargo)]).range([0, this.width], .1)
@@ -520,48 +524,36 @@
     CleanLine: function(){
       var _that = this;
 
+      // this.svg
+      //   .selectAll(".dot")
+      //   .transition()
+      //   .duration(100)
+      //   .delay(500)
+      //   .style("opacity", 
+      //     function(d){
+      //       if(d.recipient == "China"){ return 1}
+      //       else if
+      //         (d.recipient == "Iran"){ return 0}
+      //       else if
+      //         (d.recipient == "North Korea"){ return 0}
+      //       else if
+      //         (d.recipient == "Myanmar"){ return 0}
+      //       else {return 0}          
+      //     });
+
       this.svg
-        .selectAll(".dot")
-        .transition()
-        .duration(100)
-        .delay(500)
-        .style("opacity", 
-          function(d){
-            if(d.recipient == "China"){ return 1}
-            else if
-              (d.recipient == "Iran"){ return 0}
-            else if
-              (d.recipient == "North Korea"){ return 0}
-            else if
-              (d.recipient == "Myanmar"){ return 0}
-            else {return 0}          
-          });
+      .selectAll(".line")
+      .transition()
+      .duration(100)
+      .delay(300)
+      .style("opacity",0)
 
-        this.svg
-        .selectAll(".line")
-        .transition()
-        .duration(100)
-        .delay(500)
-        // .style("opacity", 
-        //   function(d){
-        //     if(d.recipient == "China"){ return 1}
-        //     else if
-        //       (d.recipient == "Iran"){ return 0.2}
-        //     else if
-        //       (d.recipient == "North Korea"){ return 0.2}
-        //     else if
-        //       (d.recipient == "Myanmar"){ return 0.2}
-        //     else {return 0.2}          
-        //   });
-        .style("opacity",0)
-
-        // console.log(this.svg)
 
 
 
     },
 
-    ShowChinaLine: function(){
+    ShowAllLines: function(){
       var _that = this;
 
       this.svg  
@@ -594,40 +586,40 @@
 
     },
 
-    ChinaArea: function(){
-      var _that = this;
+    // ChinaArea: function(){
+    //   var _that = this;
 
-      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
-      this.y.domain([0, d3.max(this.data, function(d) { return Math.max( d.value); })]);
+    //   this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
+    //   this.y.domain([0, d3.max(this.data, function(d) { return Math.max( d.value); })]);
 
-      this.area
-        .x(function(d) { return _that.x(d.year); })
-        .y0(this.height)
-        .y1(function(d) { return _that.y(d.value); });
+    //   this.area
+    //     .x(function(d) { return _that.x(d.year); })
+    //     .y0(this.height)
+    //     .y1(function(d) { return _that.y(d.value); });
 
-      this.svg.append("path")
-        .datum(this.data.filter(
-          function(d){
-            return d.country == "Total" && d.recipient == "China";
-          }
-        ))
-        .attr("class", "area")
-        .attr("id", "chinaArea")
-        .attr("d", this.area)
-        .style("opacity",0);
+    //   this.svg.append("path")
+    //     .datum(this.data.filter(
+    //       function(d){
+    //         return d.country == "Total" && d.recipient == "China";
+    //       }
+    //     ))
+    //     .attr("class", "area")
+    //     .attr("id", "chinaArea")
+    //     .attr("d", this.area)
+    //     .style("opacity",0);
 
-    },
+    // },
 
-    ShowChinaArea: function(){
-      var _that = this;
+    // ShowChinaArea: function(){
+    //   var _that = this;
 
-      this.svg
-        .select("#chinaArea")
-        .transition()
-        .duration(100)
-        .delay(1500)
-        .style("opacity",6);
-    },
+    //   this.svg
+    //     .select("#chinaArea")
+    //     .transition()
+    //     .duration(100)
+    //     .delay(1000)
+    //     .style("opacity",6);
+    // },
 
     ShowChinaStack: function(){
       var _that = this;
@@ -688,12 +680,26 @@
           })
         // .style("opacity",1)
 
-        this.svg  
-          .selectAll(".line")
-          .transition()
-          .duration(300)
-          .ease("linear")
-          .style("opacity", 0);
+      //////////////////////////////////////  
+      ////////////////////////////////////  
+      // Clear multiple line chart in svg//
+      ////////////////////////////////////
+      ////////////////////////////////////
+      this.svg  
+        .selectAll(".line")
+        .transition()
+        .duration(300)
+        .ease("linear")
+        .style("opacity", 0);
+
+
+      ////////////////////////////////////  
+      // Show China Stacked Area chart //
+      ////////////////////////////////////
+      //////////////////////////////////// 
+      d3.select("#rectClip rect")
+        .transition().duration(3000)
+        .attr("width", this.width);
     },
 
 
@@ -707,12 +713,37 @@
         .attr("height", this.height);
     },
 
-    ShowStacked: function(){
+    // ShowStacked: function(){
+    //   var _that = this;
+
+    //   d3.select("#rectClip rect")
+    //   .transition().duration(3000)
+    //   .attr("width", this.width);
+    // },
+
+    cleanChinaStacked: function(){
       var _that = this;
+
       d3.select("#rectClip rect")
       .transition().duration(3000)
-        .attr("width", this.width);
-    }
+        .attr("width", 0);
+
+      this.svg.selectAll(".band")
+        .transition()
+        .duration(2000)
+        .attr("height", 0);
+    },
+
+    // CleanChinaEmbargo: function(){
+    //   var _that = this;
+
+    //   this.svg.selectAll(".band")
+    //     .transition()
+    //     .duration(2000)
+    //     .attr("height", 0);
+
+    // },
+
 
     
 
