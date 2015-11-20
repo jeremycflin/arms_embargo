@@ -71,7 +71,7 @@ d3.csv("data/clean/null_adjust/data_adjusted.csv", function(error, data) {
   });
 
   var layers = stack(nest.entries(data.filter(
-    function(d){return d.country !== "Total" && d.recipient == "China";}
+    function(d){return d.country !== "Total" && d.recipient == "Syria";}
     )));
 
   x.domain(d3.extent(data, function(d) { return d.year; }));

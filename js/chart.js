@@ -34,7 +34,8 @@
     // valueline   : d3.svg.line(),
     area        : d3.svg.area().interpolate("basis"),
     stack       : d3.layout.stack(),
-    path        : document.querySelector('.line path'),
+
+
     
 
     // colorArray  : ["#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8", "#a8a8a8"],
@@ -188,25 +189,33 @@
 
       if (objectTop < windowBottom - animation_height) {
         // this.lineChart()
-        this.ShowEmbargo()
-        this.showAxis()
-        this.showDot()
-        this.showLine()
-        this.ShowChinaLine()
+        this.ShowEmbargo();
+        this.showAxis();
+        this.showDot();
+        this.showLine();
+        this.ShowChinaLine();
        
       };
 
 
       objectTop = $("#two").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
-      var dot = $(".dot")
 
       if (objectTop < windowBottom - animation_height) {
         this.CleanLine()
         // this.ShowChinaLine()
         // this.ShowChinaArea()
-        this.ShowStack()
-        this.ShowChinaEmbargo()
+        this.ShowChinaStack();
+        this.ShowStacked();
+        
+        
+      } 
+
+      objectTop = $("#three").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height) {
+        this.ShowChinaEmbargo();
         
       } 
 
@@ -620,8 +629,14 @@
         .style("opacity",6);
     },
 
-    ShowStack: function(){
+    ShowChinaStack: function(){
       var _that = this;
+
+      this.svg.append("clipPath")
+        .attr("id", "rectClip")
+        .append("rect")
+        .attr("width", 0)
+        .attr("height", this.height);
 
       this.stack
         .offset("zero")
@@ -635,9 +650,10 @@
       this.area
         .x(function(d) { return _that.x(d.year); })
         .y0(function(d) { return _that.y(d.y0); })
-        .y1(function(d) { return _that.y(d.y0 + d.y); });
+        .y1(function(d) { return _that.y(d.y0 + d.y); })
+        // .attr("clip-path", "url(#rectClip)");
 
-      var layers = this.stack(nest.entries(_that.data.filter(
+      var layers = this.stack(nest.entries(this.data.filter(
         function(d){return d.country !== "Total" && d.recipient == "China";}
         )));
 
@@ -649,14 +665,14 @@
         .data(layers)
         .enter().append("path")
         .attr("class", "layer")
+        .attr("clip-path", "url(#rectClip)")
         .attr("d", function(d) { return _that.area(d.values); })
-        // .style("fill", function(d, i) { return _that.z(i); });
-        // .style("fill", function(d, i) { return _that.colorArray[i]; });
-        .style("fill", "white")
-        // .style("opacity", .3)
-        .transition()
-        .duration(600)
-        .ease("linear")
+              // .style("fill", function(d, i) { return _that.z(i); });
+              // .style("fill", function(d, i) { return _that.colorArray[i]; });
+        // .style("fill", "white")
+        // .transition()
+        // .duration(600)
+        // .ease("linear")
         .style("fill", 
           function(d){
             if(d.key == "France"){ return "#d8a7ba"}
@@ -684,14 +700,21 @@
     ShowChinaEmbargo: function(){
       var _that = this;
 
-      // this.svg.selectAll(".band")
-      //   .transition()
-      //   .duration(2000)
-      //   .attr("height", this.height);
+      this.svg.selectAll(".band")
+        .transition()
+        .duration(2000)
+        // .delay(3000)
+        .attr("height", this.height);
+    },
+
+    ShowStacked: function(){
+      var _that = this;
+      d3.select("#rectClip rect")
+      .transition().duration(3000)
+        .attr("width", this.width);
     }
 
-
- 
+    
 
     
 
