@@ -20,7 +20,7 @@
       line-height: 1.2em;
       margin-bottom: 1000px;
       opacity: 0;
-      background-color: rgba(255,255,255,0.85);
+      background-color: rgba(255,255,255,0.7);
       max-width: 43%;
     /*  color:white;*/
     }
@@ -158,6 +158,10 @@
     .layer{
       stroke-width:0.7;
       stroke:white;
+    }
+
+    .embargoAnnotate{
+      font-size: 1.1em;
     }
 
     /*************/
