@@ -2,27 +2,26 @@
 
   var Scroller = {
 
-    svg         : {},
-    width       : 900,
-    height      : 500,
-    margin      : {top: 10, right: 30, bottom: 30, left: 50},
+    svg                       : {},
+    width                     : 900,
+    height                    : 500,
+    margin                    : {top: 10, right: 30, bottom: 30, left: 50},
 
-    data        : {},
+    data                      : {},
 
-    x           : d3.time.scale(),
-    y           : d3.scale.linear(),
-    z           : d3.scale.category20c(),
-    xAxis       : d3.svg.axis(),
-    yAxis       : d3.svg.axis(),
-    parseDate   : d3.time.format("%Y").parse,
-    valueline : d3.svg.line().interpolate("basis"),
-    area        : d3.svg.area().interpolate("basis"),
-    stack       : d3.layout.stack(),
-    // scrollPast  : false, 
-    hasMyanmarAreaTriggered : false,
-    hasBeenTriggered :false, 
-    hasChinaAreaTriggered: false,
-    hasChinaEmbargoTriggered: false,
+    x                         : d3.time.scale(),
+    y                         : d3.scale.linear(),
+    z                         : d3.scale.category20c(),
+    xAxis                     : d3.svg.axis(),
+    yAxis                     : d3.svg.axis(),
+    parseDate                 : d3.time.format("%Y").parse,
+    valueline                 : d3.svg.line().interpolate("basis"),
+    area                      : d3.svg.area().interpolate("basis"),
+    stack                     : d3.layout.stack(),
+    hasMyanmarAreaTriggered   : false,
+    hasBeenTriggered          : false, 
+    hasChinaAreaTriggered     : false,
+    hasChinaEmbargoTriggered  : false,
     hasCleanChinaAreaTriggered: false,
 
 
@@ -246,7 +245,25 @@
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "band")
-        .style("opacity", 0.5);
+        .style("opacity", 0.35);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1989")))
+        .attr("y", -10)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "embargoAnnotate")
+        .text("Year 1989")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2013")))
+        .attr("y", -10)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "embargoAnnotate")
+        .text("Year 2014")
+        .style("opacity",0);
 
       // this.svg.selectAll(".band")
       //   .transition()
@@ -524,6 +541,10 @@
         function(d){ return d.country !== "Total" && d.recipient == "China";}
         )));
 
+      var layersMyanmar = this.stack(nest.entries(this.data.filter(
+        function(d){return d.country !== "Total" && d.recipient == "Myanmar";}
+        )));
+
       this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
       this.y.domain([0, d3.max(this.data, function(d) { return d.y0 + d.y; })]);
 
@@ -554,6 +575,17 @@
             else {return "rgba(172, 167, 167, .5)"}          
           })
         // .style("opacity",1)
+
+      this.svg.selectAll(".layersMyanmar")
+        .data(layersMyanmar)
+        .enter()
+        .append("path")
+        .attr("class", "layers")
+        .attr("class", "layersMyanmar")
+        .attr("clip-path", "url(#rectClip)")
+        .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
+        .style("fill", function(d, i) { return _that.z(i); })
+        .style("opacity", 0)
 
       //////////////////////////////////////  
       ////////////////////////////////////  
@@ -586,6 +618,12 @@
         .duration(1500)
         // .delay(3000)
         .attr("height", this.height);
+
+      this.svg.selectAll(".embargoAnnotate")
+        .transition()
+        .duration(1800)
+        .ease("linear")
+        .style("opacity",1)
     },
 
     ShowStacked: function(){
@@ -599,14 +637,20 @@
     cleanChinaStacked: function(){
       var _that = this;
 
-      // d3.select("#rectClip rect")
-      // .transition().duration(3000)
-      //   .attr("width", 0);
+      d3.select("#rectClip rect")
+      .transition().duration(3000)
+        .attr("width", 0);
 
       this.svg.selectAll(".band")
         .transition()
         .duration(2000)
         .attr("height", 0);
+
+      this.svg.selectAll(".embargoAnnotate")
+        .transition()
+        .duration(1800)
+        .ease("linear")
+        .style("opacity",0)
     },
 
     showChinaMain: function(){
@@ -641,93 +685,21 @@
     ShowMyanmarStack: function(){
       var _that = this;
 
-      this.svg.append("clipPath")
-        .attr("id", "rectClip")
-        .append("rect")
-        .attr("width", 0)
-        .attr("height", this.height);
 
-      this.stack
-        .offset("zero")
-        .values(function(d) { return d.values; })
-        .x(function(d) { return d.year; })
-        .y(function(d) { return d.value; });
-
-      var nest = d3.nest()
-        .key(function(d) { return d.country; });
-
-      this.area
-        .x(function(d) { return _that.x(d.year); })
-        .y0(function(d) { return _that.y(d.y0); })
-        .y1(function(d) { return _that.y(d.y0 + d.y); })
-        // .attr("clip-path", "url(#rectClip)");
-
-      // var layers = this.stack(nest.entries(this.data.filter(
-      //   function(d){return d.country !== "Total" && d.recipient == "Myanmar";}
-      //   )));
-
-      var layers = this.stack(nest.entries(this.data.filter(
-        function(d){return d.country !== "Total" && d.recipient == "Myanmar";}
-        )));
-
-      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
-      this.y.domain([0, d3.max(this.data, function(d) { return d.y0 + d.y; })]);
-
-      // d3.selectAll(".layer")
-      //   .remove()
-
-      console.log("START LAST CHART NOW")
+      d3.selectAll(".layersMyanmar")
+        .transition()
+        .style("opacity",1)
 
       d3.selectAll(".layer")
-        .data(layers)
-        .enter()
-        .append("path")
-        //.transition()
-        //.delay(3000)
-        .attr("class", "layer")
-        //.attr("clip-path", "url(#rectClip)")
-        .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
-        .style("fill", function(d, i) { return _that.z(i); });
-              // .style("fill", function(d, i) { return _that.colorArray[i]; });
-        // .style("fill", "white")
-        // .transition()
-        // .duration(600)
-        // .ease("linear")
-        // .style("fill", 
-        //   function(d){
-        //     if(d.key == "France"){ return "#d8a7ba"}
-        //     else if
-        //       (d.key == "Italy"){ return "#c8839f"}
-        //     else if
-        //       (d.key == "United Kingdom"){ return "#be6c8d"}
-        //     // else if
-        //     //   (d.key == "Switzerland"){ return "#b14e76"}
-        //     else if
-        //       (d.key == "Germany (FRG)"){ return "#8d3f5e"}
-        //     else {return "rgba(172, 167, 167, .5)"}          
-        //   })
-        // .style("opacity",1)
-
-      //////////////////////////////////////  
-      ////////////////////////////////////  
-      // Clear multiple line chart in svg//
-      ////////////////////////////////////
-      ////////////////////////////////////
-      this.svg  
-        .selectAll(".line")
         .transition()
-        .duration(300)
-        .ease("linear")
-        .style("opacity", 0);
+        .style("opacity",0)
 
-
-      ////////////////////////////////////  
-      // Show China Stacked Area chart //
-      ////////////////////////////////////
-      //////////////////////////////////// 
       d3.select("#rectClip rect")
         .transition().duration(3000)
         .attr("width", this.width);
+
+      console.log("START LAST CHART NOW")
+
     },
 
 
