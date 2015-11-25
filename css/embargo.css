@@ -16,7 +16,7 @@
 
     .text{
       font-family: Garamond, Times;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 1.2em;
       margin-bottom: 1000px;
       opacity: 0;
@@ -57,7 +57,9 @@
     }
 
     img{
-      width: 300px;
+      width: 180px;
+      margin-top: 15px;
+      /*margin-bottom: 15px;*/
     }
 
     /*************/
@@ -155,7 +157,12 @@
     /*************/
     /*************/
 
-    .layer{
+    .layersChina{
+      stroke-width:0.7;
+      stroke:white;
+    }
+
+    .layersMyanmar{
       stroke-width:0.7;
       stroke:white;
     }
