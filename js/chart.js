@@ -208,7 +208,7 @@
 
       if (objectTop < windowBottom - animation_height && this.hasMyanmarAreaTriggered === false) {
         this.ShowMyanmarStack();
-        this.DrawEmbargoMyanmar();
+        // this.DrawEmbargoMyanmar();
         this.hasMyanmarAreaTriggered = true;
         
       } 
@@ -217,7 +217,7 @@
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasMyanmarEmbargoTriggered === false) {
-        this.ShowChinaEmbargo();
+        this.ShowMyanmarEmbargo();
         this.hasMyanmarEmbargoTriggered = true;
         
       } 
@@ -266,7 +266,6 @@
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "band")
-
         .style("opacity", 0.35);
 
       this.svg.append("text")
@@ -274,8 +273,17 @@
         .attr("y", -10)
         .attr("width", barWidth)
         .attr("height", 0)
-        .attr("class", "embargoAnnotate")
+        .attr("class", "embargoAnnotateChina")
         .text("EU embargo starts from year 1989")
+        .style("opacity",0);
+
+       this.svg.append("text")
+        .attr("x", this.x(new Date("1991")))
+        .attr("y", -10)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "embargoAnnotateMyanmar")
+        .text("EU embargo starts from year 1991")
         .style("opacity",0);
 
       // this.svg.append("text")
@@ -585,7 +593,18 @@
               (d.key == "Germany (FRG)"){ return "#8d3f5e"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
-        .style("opacity",.5)
+        .style("opacity",function(d){
+            if(d.key == "France"){ return 1}
+            else if
+              (d.key == "Italy"){ return 1}
+            else if
+              (d.key == "United Kingdom"){ return 1}
+            else if
+              (d.key == "Russia"){ return 0.3}
+            else if
+              (d.key == "Germany (FRG)"){ return 1}
+            else {return 0.3}          
+          })
 
 
 
@@ -712,7 +731,7 @@
         // .delay(3000)
         .attr("height", this.height);
 
-      this.svg.selectAll(".embargoAnnotate")
+      this.svg.selectAll(".embargoAnnotateChina")
         .transition()
         .duration(1800)
         .ease("linear")
@@ -739,7 +758,7 @@
         .duration(2000)
         .attr("height", 0);
 
-      this.svg.selectAll(".embargoAnnotate")
+      this.svg.selectAll(".embargoAnnotateChina")
         .transition()
         .duration(1800)
         .ease("linear")
@@ -752,33 +771,13 @@
       this.svg.selectAll(".layersChina")
         .transition()
         .duration(1000)
-        .ease("linear")
         .style("opacity", 
           function(d){
             if(d.key == "Russia"){ return 1}
-            // else if
-            //   (d.key == "Italy"){ return "#c8839f"}
-            // else if
-            //   (d.key == "United Kingdom"){ return "#be6c8d"}
-            // else if
-            //   (d.key == "Russia"){ return "#FF6F6F"}
-            // else if
-            //   (d.key == "Germany (FRG)"){ return "#8d3f5e"}
-            else {return 0.5}          
+
+            else {return 0.3}          
           })
-          // .style("opacity", 
-          // function(d){
-          //   if(d.key == "France"){ return 0.4}
-          //   else if
-          //     (d.key == "Italy"){ return 0.4}
-          //   else if
-          //     (d.key == "United Kingdom"){ return 0.4}
-          //   else if
-          //     (d.key == "Russia"){ return 1}
-          //   else if
-          //     (d.key == "Germany (FRG)"){ return 0.4}
-          //   else {return 0.4}          
-          // })
+
 
     },
 
@@ -789,6 +788,19 @@
       d3.selectAll(".layersMyanmar")
         .transition()
         .style("opacity",1)
+        // .style("opacity", 
+        //   function(d){
+        //     if(d.key == "Poland"){ return 0.5}
+        //     else if
+        //       (d.key == "Russia"){ return 1}
+        //     else if
+        //       (d.key == "United Kingdom"){ return 0.5}
+        //     else if
+        //       (d.key == "Germany (FRG"){ return 0.5}
+        //     else if
+        //       (d.key == "Denmark"){ return 0.5}
+        //     else {return 0.5}          
+        //   })
 
       d3.selectAll(".layersChina")
         .transition()
@@ -798,16 +810,9 @@
         .transition().duration(3000)
         .attr("width", this.width);
 
-      console.log("START LAST CHART NOW")
-
-    },
-
-    DrawEmbargoMyanmar: function(){
-      var _that = this;
-
       this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
 
-      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
+      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1991"));
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("1991")))
@@ -818,6 +823,43 @@
         .attr("class", "embargoMyanmar")
         .style("opacity", 0.35);
 
+      console.log("START LAST CHART NOW")
+
+    },
+
+    ShowMyanmarEmbargo: function(){
+      var _that = this;
+
+      this.svg.selectAll(".embargoMyanmar")
+        .transition()
+        .duration(1500)
+        // .delay(3000)
+        .attr("height", this.height);
+
+      this.svg.selectAll(".embargoAnnotateMyanmar")
+        .transition()
+        .duration(1800)
+        .ease("linear")
+        .style("opacity",1)
+
+    },
+
+    // DrawEmbargoMyanmar: function(){
+    //   var _that = this;
+
+      // this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
+
+      // var barWidth = _that.x(new Date("2014")) - _that.x(new Date("1989"));
+
+      // this.svg.append("rect")
+      //   .attr("x", this.x(new Date("1991")))
+      //   .attr("y", 0)
+      //   .attr("width", barWidth)
+      //   .attr("height", 0)
+      //   .attr("class", "band")
+      //   .attr("class", "embargoMyanmar")
+      //   .style("opacity", 0.35);
+
       // this.svg.append("text")
       //   .attr("x", this.x(new Date("1989")))
       //   .attr("y", -10)
@@ -827,7 +869,7 @@
       //   .text("EU embargo starts from year 1989")
       //   .style("opacity",0);
 
-    } 
+    // } 
 
 
   };
