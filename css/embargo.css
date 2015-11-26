@@ -18,8 +18,8 @@
       font-family: Garamond, Times;
       font-size: 16px;
       line-height: 1.2em;
-      margin-bottom: 1000px;
-      opacity: 0;
+      margin-bottom: 650px;
+      /*opacity: 0;*/
       background-color: rgba(255,255,255,0.7);
       max-width: 43%;
     /*  color:white;*/
@@ -114,7 +114,12 @@
 
     .band {
     fill: #ded;
+    /*fill: rgba(63,63,63, 0.7);*/
     /*fill: none;*/
+    }
+
+    .embargoMyanmar{
+    fill: #ded;
     }
 
     #china{
