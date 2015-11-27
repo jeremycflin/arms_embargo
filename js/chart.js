@@ -106,37 +106,37 @@
       });
 
 
-      $(".title").each(function(){
-          // var objectTop = $(this).offset().top;
-          // var windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      // $(".title").each(function(){
+      //     // var objectTop = $(this).offset().top;
+      //     // var windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
-          objectTop = $(this).offset().top;
-          windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      //     objectTop = $(this).offset().top;
+      //     windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
-          if ( objectTop < windowBottom ) {
-            if ( objectTop < windowBottom - animation_height ) {
-              $("#graphic").css( {
-                transition: 'background-color 1.7s linear',
-                'background-color': 'white'
-              });
+      //     if ( objectTop < windowBottom ) {
+      //       if ( objectTop < windowBottom - animation_height ) {
+      //         $("#graphic").css( {
+      //           transition: 'background-color 1.7s linear',
+      //           'background-color': 'white'
+      //         });
 
-              $(".title").css( {
-                transition: 'color 1.7s linear',
-                'color': 'rgba(0,0,0,.8)'
-              });
-          } else {
-            $("#graphic").css( {
-              transition: 'background-color 0.8s linear',
-              // opacity: (windowBottom - objectTop) * ratio
-              'background-color': 'rgba(0,0,0,.9)'
-            });
+      //         $(".title").css( {
+      //           transition: 'color 1.7s linear',
+      //           'color': 'rgba(0,0,0,.8)'
+      //         });
+      //     } else {
+      //       $("#graphic").css( {
+      //         transition: 'background-color 0.8s linear',
+      //         // opacity: (windowBottom - objectTop) * ratio
+      //         'background-color': 'rgba(0,0,0,.9)'
+      //       });
 
-          }
+      //     }
 
-      } else {
-        $("#graphic").css( 'background-color', 'rgba(0,0,0,.9)' );
-        }
-      });
+      // } else {
+      //   $("#graphic").css( 'background-color', 'rgba(0,0,0,.9)' );
+      //   }
+      // });
 
       objectTop = $(".text").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
@@ -144,12 +144,15 @@
       // var hasBeenTriggered = false;
 
       if (objectTop < windowBottom - animation_height && this.hasBeenTriggered === false) {
-        this.drawEmbargo();
+        
         this.showAxis();
         // this.ShowAllLines();
+        
         this.myanmarStack();
         this.koreaStack();
         this.iranStack();
+        this.drawEmbargo();
+    
         this.hasBeenTriggered = true;
 
         // if (objectTop >  windowBottom - animation_height){
@@ -525,7 +528,7 @@
         .data(layersIran)
         .enter()
         .append("path")
-        .attr("class", "layers")
+        // .attr("class", "layers")
         .attr("class", "layersIran")
         .attr("clip-path", "url(#rectClip)")
         .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
@@ -829,7 +832,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoMyanmar")
-        .style("opacity", 0.35);
+        .style("opacity", 0.4);
 
       console.log("START LAST CHART NOW")
 
@@ -879,7 +882,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoKorea")
-        .style("opacity", 0.35);
+        .style("opacity", 0.4);
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("2006")))
@@ -888,7 +891,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoKoreaUN")
-        .style("opacity", 0.35);
+        .style("opacity", 0.4);
 
     },
     showIranStack: function(){
@@ -927,6 +930,7 @@
       this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
 
       var barWidth = _that.x(new Date("2014")) - _that.x(new Date("2006"));
+      var barWidth2007 = _that.x(new Date("2014")) - _that.x(new Date("2007"));
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("2006")))
@@ -934,8 +938,17 @@
         .attr("width", barWidth)
         .attr("height", 0)
         // .attr("class", "band")
+        .attr("class", "embargoIranUN")
+        .style("opacity", 0.4);
+
+      this.svg.append("rect")
+        .attr("x", this.x(new Date("2007")))
+        .attr("y", this.y(2000))
+        .attr("width", barWidth2007)
+        .attr("height", 0)
+        .attr("class", "band")
         .attr("class", "embargoIran")
-        .style("opacity", 0.35);
+        .style("opacity", 0.4);
 
       // this.svg.append("rect")
       //   .attr("x", this.x(new Date("2006")))
@@ -944,7 +957,7 @@
       //   .attr("height", 0)
       //   .attr("class", "band")
       //   .attr("class", "embargoKoreaUN")
-      //   .style("opacity", 0.35);
+      //   .style("opacity", 0.4);
 
     },
 
@@ -1040,7 +1053,7 @@
         .attr("height", 0)
         // .attr("class", "band")
         .attr("class", "embargoChina")
-        .style("opacity", 0.35);
+        .style("opacity", 0.4);
 
       this.svg.append("text")
         .attr("x", this.x(new Date("1989")))
@@ -1051,7 +1064,7 @@
         .text("EU embargo starts from year 1989")
         .style("opacity",0);
 
-       this.svg.append("text")
+      this.svg.append("text")
         .attr("x", this.x(new Date("1991")))
         .attr("y", -10)
         .attr("width", barWidth)
@@ -1060,7 +1073,7 @@
         .text("EU embargo starts from year 1991")
         .style("opacity",0);
 
-       this.svg.append("text")
+      this.svg.append("text")
         .attr("x", this.x(new Date("2006")))
         .attr("y", this.y(2000) - 10)
         .attr("width", barWidth)
@@ -1069,13 +1082,31 @@
         .text("EU embargo starts from year 2006")
         .style("opacity",0);
 
-        this.svg.append("text")
+      this.svg.append("text")
         .attr("x", this.x(new Date("2006")))
         .attr("y", -10)
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "embargoAnnotateKorea")
         .text("UN embargo starts from year 2006")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2006")))
+        .attr("y", -10)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "embargoAnnotateIran")
+        .text("UN embargo starts from year 2006")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2007")))
+        .attr("y", this.y(660))
+        .attr("width", barWidth)
+        .attr("height", 0)
+        .attr("class", "embargoAnnotateIran")
+        .text("EU embargo starts from year 2007")
         .style("opacity",0);
 
       // this.svg.append("text")
@@ -1187,20 +1218,19 @@
     showIranEmbargo: function(){
       var _that = this;
 
+      this.svg.selectAll(".embargoIranUN")
+        .transition()
+        .duration(1500)
+        .delay(500)
+        .attr("height", this.height/2.29);
+
       this.svg.selectAll(".embargoIran")
         .transition()
         .duration(1500)
         // .delay(3000)
-        .attr("height", this.height);
+        .attr("height", this.height/1.77);
 
-      // this.svg.selectAll(".embargoKoreaUN")
-      //   .transition()
-      //   .duration(1500)
-      //   .delay(500)
-      //   .attr("height", this.height/2.29);
-
-
-      this.svg.selectAll(".embargoAnnotateKorea")
+      this.svg.selectAll(".embargoAnnotateIran")
         .transition()
         .duration(1800)
         .ease("linear")
@@ -1224,7 +1254,7 @@
       //   .attr("height", 0)
       //   .attr("class", "band")
       //   .attr("class", "embargoMyanmar")
-      //   .style("opacity", 0.35);
+      //   .style("opacity", 0.4);
 
       // this.svg.append("text")
       //   .attr("x", this.x(new Date("1989")))

@@ -10,7 +10,7 @@
       height: 100%;
       top:0;
       left:0;
-      background-color: rgba(0,0,0,.95);
+      /*background-color: rgba(0,0,0,.95);*/
       font-size: 0.6em;
     }
 
@@ -31,7 +31,7 @@
       /*margin-left: -40px;*/
       opacity: 1;
       line-height: 1.1em;
-      color:white;
+      /*color:white;*/
       background-color: initial;
       font-size: 22px;
     }
@@ -134,6 +134,10 @@
 
     .embargoIran{
       fill: #ded;
+    }
+
+    .embargoIranUN{
+      fill: #ddddee;
     }
 
     #china{
