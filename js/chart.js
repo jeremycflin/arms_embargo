@@ -71,9 +71,6 @@
 
     },
 
-  
-
-
     trigger: function(){
       var animation_height = $(window).innerHeight() * 0.4;
       var _that = this;
@@ -263,6 +260,13 @@
     },
 
 
+    /************************
+    * Axix related functions 
+    ************************
+    ************************
+    ************************ 
+    */
+
     createXAxis : function(){
       return d3.svg.axis()
         .scale(this.x)
@@ -277,11 +281,30 @@
         .ticks(6)
     },
 
-    /**
-   * Draw all embargos 
-   *
-   * @param value - the new container value
-   */
+    showAxis: function(){
+      var _that = this;
+
+      this.svg
+        .selectAll(".axis")
+        .transition()
+        .duration(100)
+        .style("opacity", 1.0);
+
+      this.svg
+        .selectAll(".axis_lable")
+        .transition()
+        .duration(100)
+        .delay(500)
+        .style("opacity", 1.0);
+
+    },
+
+    /************************
+    * Draw all embargo rects
+    ************************
+    ************************
+    ************************ 
+    */
 
     drawEmbargo: function(){
       var _that = this;
@@ -376,6 +399,13 @@
 
 
     },
+
+    /************************
+    * Lines related functions
+    ************************
+    ************************
+    ************************ 
+    */
 
     lineChart: function(){
       var _that = this;
@@ -497,24 +527,6 @@
 
     // },
 
-    showAxis: function(){
-      var _that = this;
-
-      this.svg
-        .selectAll(".axis")
-        .transition()
-        .duration(100)
-        .style("opacity", 1.0);
-
-      this.svg
-        .selectAll(".axis_lable")
-        .transition()
-        .duration(100)
-        .delay(500)
-        .style("opacity", 1.0);
-
-    },
-
     cleanLine: function(){
       var _that = this;
 
@@ -526,26 +538,26 @@
       .style("opacity",0)
     },
 
-    ShowAllLines: function(){
-      var _that = this;
+    // ShowAllLines: function(){
+    //   var _that = this;
 
-      this.svg  
-        .selectAll(".line")
-        .transition()
-        .duration(29000)
-        // .delay(500)
-        .ease("linear")
-        .style("stroke-dashoffset", 0);
+    //   this.svg  
+    //     .selectAll(".line")
+    //     .transition()
+    //     .duration(29000)
+    //     // .delay(500)
+    //     .ease("linear")
+    //     .style("stroke-dashoffset", 0);
 
-      this.svg  
-        .selectAll("#china")
-        .transition()
-        .duration(18000)
-        // .delay(500)
-        .ease("linear")
-        .style("stroke-dashoffset", 0);
+    //   this.svg  
+    //     .selectAll("#china")
+    //     .transition()
+    //     .duration(18000)
+    //     // .delay(500)
+    //     .ease("linear")
+    //     .style("stroke-dashoffset", 0);
 
-    },
+    // },
 
     ShowChinaStack: function(){
       var _that = this;
