@@ -132,6 +132,10 @@
       fill: #ddddee;
     }
 
+    .embargoIran{
+      fill: #ded;
+    }
+
     #china{
       stroke: rgba(190, 108, 141,.7);
     }
@@ -178,6 +182,16 @@
     }
 
     .layersMyanmar{
+      stroke-width:0.7;
+      stroke:white;
+    }
+
+    .layersKorea{
+      stroke-width:0.7;
+      stroke:white;
+    }
+
+    .layersIran{
       stroke-width:0.7;
       stroke:white;
     }
