@@ -32,6 +32,7 @@
     hasIranAreaTriggered       : false,
     hasCleanKoreaTriggered     : false,
     hasIranEmbargoTriggered    : false,
+    hasSyriaAreaTriggered      : false,
 
 
 
@@ -151,7 +152,9 @@
         this.myanmarStack();
         this.koreaStack();
         this.iranStack();
+        this.syriaStack();
         this.drawEmbargo();
+
     
         this.hasBeenTriggered = true;
 
@@ -266,6 +269,15 @@
       if (objectTop < windowBottom - animation_height && this.hasIranEmbargoTriggered === false) {
         this.showIranEmbargo();
         this.hasIranEmbargoTriggered = true;
+        
+      } 
+
+      objectTop = $("#thirteen").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height && this.hasSyriaAreaTriggered === false) {
+        this.showSyriaStack();
+        this.hasSyriaAreaTriggered = true;
         
       } 
 
@@ -651,6 +663,57 @@
 
     },
 
+    syriaStack: function(){
+      var _that = this;
+
+      this.stack
+        .offset("zero")
+        .values(function(d) { return d.values; })
+        .x(function(d) { return d.year; })
+        .y(function(d) { return d.value; });
+
+      var nest = d3.nest()
+        .key(function(d) { return d.country; });
+
+      this.area
+        .x(function(d) { return _that.x(d.year); })
+        .y0(function(d) { return _that.y(d.y0); })
+        .y1(function(d) { return _that.y(d.y0 + d.y); })
+        // .attr("clip-path", "url(#rectClip)");
+
+
+      var layersSyria = this.stack(nest.entries(this.data.filter(
+        function(d){return d.country !== "Total" && d.recipient == "Syria";}
+        )));
+
+      this.x.domain(d3.extent(this.data, function(d) { return d.year; }));
+      this.y.domain([0, d3.max(this.data, function(d) { return d.y0 + d.y; })]);
+
+      this.svg.selectAll(".layersSyria")
+        .data(layersSyria)
+        .enter()
+        .append("path")
+        .attr("class", "layers")
+        .attr("class", "layersSyria")
+        .attr("clip-path", "url(#rectClip)")
+        .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
+        .style("fill", 
+          function(d){
+            if(d.key == "Poland"){ return "#de9e02"}
+            else if
+              (d.key == "Russia"){ return "#fdb917"}
+            else if
+              (d.key == "United Kingdom"){ return "#fdc949"}
+            else if
+              (d.key == "Germany (FRG"){ return "#fed87c"}
+            else if
+              (d.key == "Denmark"){ return "#fd9f30"}
+            else {return "rgba(172, 167, 167, .5)"}          
+          })
+        .style("opacity", 0)
+
+    },
+
     /************************
     * Show stacked area charts 
     * related functions
@@ -961,6 +1024,73 @@
 
     },
 
+    showSyriaStack: function(){
+      var _that = this;
+
+
+      d3.selectAll(".layersSyria")
+        .transition()
+        .style("opacity",1)
+        // .style("opacity", 
+        //   function(d){
+        //     if(d.key == "Poland"){ return 0.5}
+        //     else if
+        //       (d.key == "Russia"){ return 1}
+        //     else if
+        //       (d.key == "United Kingdom"){ return 0.5}
+        //     else if
+        //       (d.key == "Germany (FRG"){ return 0.5}
+        //     else if
+        //       (d.key == "Denmark"){ return 0.5}
+        //     else {return 0.5}          
+        //   })
+
+      d3.selectAll(".layersIran")
+        .transition()
+        .style("opacity",0)
+
+      d3.select("#rectClip rect")
+        .transition().duration(3000)
+        .attr("width", this.width);
+
+       // d3.select("#rectClip rect")
+       //  .transition().duration(3000)
+       //  .attr("width", 0);
+
+      this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
+
+      var barWidth = _that.x(new Date("2014")) - _that.x(new Date("2006"));
+      var barWidth2007 = _that.x(new Date("2014")) - _that.x(new Date("2007"));
+
+      this.svg.append("rect")
+        .attr("x", this.x(new Date("2006")))
+        .attr("y", 0)
+        .attr("width", barWidth)
+        .attr("height", 0)
+        // .attr("class", "band")
+        .attr("class", "embargoIranUN")
+        .style("opacity", 0.4);
+
+      this.svg.append("rect")
+        .attr("x", this.x(new Date("2007")))
+        .attr("y", this.y(2000))
+        .attr("width", barWidth2007)
+        .attr("height", 0)
+        .attr("class", "band")
+        .attr("class", "embargoIran")
+        .style("opacity", 0.4);
+
+      // this.svg.append("rect")
+      //   .attr("x", this.x(new Date("2006")))
+      //   .attr("y", 0)
+      //   .attr("width", barWidth)
+      //   .attr("height", 0)
+      //   .attr("class", "band")
+      //   .attr("class", "embargoKoreaUN")
+      //   .style("opacity", 0.4);
+
+    },
+
     /************************
     * Clean stacked area charts 
     * related functions
@@ -1029,6 +1159,31 @@
         .duration(2000)
         .ease("linear")
         .style("opacity",0);
+
+    },
+
+    cleanSyriarStack: function(){
+      var _that = this;
+
+      d3.select("#rectClip rect")
+        .transition().duration(3000)
+        .attr("width", 0);
+
+      this.svg.selectAll(".embargoIran")
+        .transition()
+        .duration(2000)
+        .attr("height", 0);
+
+      this.svg.selectAll(".embargoIranUN")
+        .transition()
+        .duration(2000)
+        .attr("height", 0);
+
+      // this.svg.selectAll(".embargoAnnotateKorea")
+      //   .transition()
+      //   .duration(2000)
+      //   .ease("linear")
+      //   .style("opacity",0);
 
     },
 
@@ -1237,6 +1392,7 @@
         .style("opacity",1)
 
     },
+
 
     
 
