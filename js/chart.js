@@ -33,6 +33,7 @@
     hasCleanKoreaTriggered     : false,
     hasIranEmbargoTriggered    : false,
     hasSyriaAreaTriggered      : false,
+    hasCleanIranTriggered      : false,
 
 
 
@@ -273,6 +274,15 @@
       } 
 
       objectTop = $("#thirteen").offset().top;
+      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+
+      if (objectTop < windowBottom - animation_height && this.hasCleanIranTriggered === false) {
+        this.cleanIranStack();
+        this.hasCleanIranTriggered = true;
+        
+      } 
+
+       objectTop = $("#fourteen").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasSyriaAreaTriggered === false) {
@@ -1162,7 +1172,7 @@
 
     },
 
-    cleanSyriarStack: function(){
+    cleanIranStack: function(){
       var _that = this;
 
       d3.select("#rectClip rect")
