@@ -136,17 +136,25 @@
       fill: #ded;
     }
 
+    .embargoSyria{
+      fill: #ded;
+    }
+
     .embargoIranUN{
       fill: #ddddee;
+    }
+
+    .embargoSyriaArab{
+      fill: rgba(239, 115, 35, .8)
     }
 
     #china{
       stroke: rgba(190, 108, 141,.7);
     }
 
-    #iran{
+    /*#iran{
       stroke: rgba(127, 164, 206,.7);
-    }
+    }*/
 
     #korea{
       stroke: rgba(186, 215, 46,.7);
@@ -157,7 +165,8 @@
     }
 
     #syria{
-      stroke: rgba(157,91,48,.7);
+      /*stroke: rgba(157,91,48,.7);*/
+      stroke: rgba(127, 164, 206,.7);
     }
 
     /*************/
