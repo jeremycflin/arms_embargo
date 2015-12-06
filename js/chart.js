@@ -413,7 +413,7 @@
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .style("font-size",10)
-        .text("Million dollar")
+        .text("Million dollar worth of arms")
         .style("opacity",0);
 
       this.svg.append("path")      
@@ -1290,7 +1290,7 @@
 
 
       this.svg.append("text")
-        .attr("x", this.x(new Date("2007")))
+        .attr("x", this.x(new Date("2006.5")))
         .attr("y", -10)
         .attr("width", barWidth)
         .attr("height", 0)
