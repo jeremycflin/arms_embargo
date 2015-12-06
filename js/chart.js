@@ -195,14 +195,14 @@
       } 
 
 
-      objectTop = $("#four").offset().top;
-      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      // objectTop = $("#four").offset().top;
+      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
-      if (objectTop < windowBottom - animation_height && this.hasChinaMainPlayerTriggered === false) {
-        this.showChinaMain();
-        // this.cleanChinaStacked();      
-        this.hasChinaMainPlayerTriggered = true;  
-      } 
+      // if (objectTop < windowBottom - animation_height && this.hasChinaMainPlayerTriggered === false) {
+      //   this.showChinaMain();
+      //   // this.cleanChinaStacked();      
+      //   this.hasChinaMainPlayerTriggered = true;  
+      // } 
 
       objectTop = $("#five").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
@@ -233,7 +233,7 @@
         
       } 
 
-      objectTop = $("#eight").offset().top;
+      objectTop = $("#nine").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasCleanMyanmarTriggered === false) {
@@ -242,7 +242,7 @@
         
       } 
 
-      objectTop = $("#nine").offset().top;
+      objectTop = $("#ten").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasKoreaEmbargoTriggered === false) {
@@ -252,14 +252,17 @@
         
       } 
 
-      objectTop = $("#ten").offset().top;
+      objectTop = $("#eleven").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasCleanKoreaTriggered === false) {
+        this.showKoreaEmbargo();
         this.cleanKorearStack();
         this.hasCleanKoreaTriggered = true;
         
       }
+
+
 
       // objectTop = $("#eleven").offset().top;
       // windowBottom = $(window).scrollTop() + $(window).innerHeight();
@@ -279,14 +282,14 @@
         
       // } 
 
-      objectTop = $("#eleven").offset().top;
-      windowBottom = $(window).scrollTop() + $(window).innerHeight();
+      // objectTop = $("#eleven").offset().top;
+      // windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
-      if (objectTop < windowBottom - animation_height && this.hasCleanIranTriggered === false) {
-        this.cleanIranStack();
-        this.hasCleanIranTriggered = true;
+      // if (objectTop < windowBottom - animation_height && this.hasCleanIranTriggered === false) {
+      //   this.cleanIranStack();
+      //   this.hasCleanIranTriggered = true;
         
-      } 
+      // } 
 
        objectTop = $("#twelve").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
@@ -297,7 +300,7 @@
         
       } 
 
-      objectTop = $("#twelve").offset().top;
+      objectTop = $("#thirteen").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasSyriaEmbargoTriggered === false) {
@@ -633,13 +636,13 @@
           function(d){
             if(d.key == "Poland"){ return "#de9e02"}
             else if
-              (d.key == "Russia"){ return "#fdb917"}
+              (d.key == "Russia"){ return "rgb(172, 167, 167)"}
             else if
               (d.key == "United Kingdom"){ return "#fdc949"}
             else if
               (d.key == "Germany (FRG)"){ return "#fed87c"}
-            else if
-              (d.key == "Denmark"){ return "#fd9f30"}
+            // else if
+            //   (d.key == "Denmark"){ return "#fd9f30"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
@@ -819,23 +822,12 @@
             else if
               (d.key == "United Kingdom"){ return "#be6c8d"}
             else if
-              (d.key == "Russia"){ return "#cb89a3"}
+              (d.key == "Russia"){ return "rgb(172, 167, 167)"}
             else if
               (d.key == "Germany (FRG)"){ return "#8d3f5e"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
-        .style("opacity",function(d){
-            if(d.key == "France"){ return 1}
-            else if
-              (d.key == "Italy"){ return 1}
-            else if
-              (d.key == "United Kingdom"){ return 1}
-            else if
-              (d.key == "Russia"){ return 0.3}
-            else if
-              (d.key == "Germany (FRG)"){ return 1}
-            else {return 0.3}          
-          })
+
 
 
 
@@ -879,21 +871,21 @@
     //   .attr("width", this.width);
     // },
 
-    showChinaMain: function(){
-      var _that = this;
+    // showChinaMain: function(){
+    //   var _that = this;
 
-      this.svg.selectAll(".layersChina")
-        .transition()
-        .duration(1000)
-        .style("opacity", 
-          function(d){
-            if(d.key == "Russia"){ return 1}
+    //   this.svg.selectAll(".layersChina")
+    //     .transition()
+    //     .duration(1000)
+    //     .style("fill", 
+    //       function(d){
+    //         if(d.key == "Russia"){ return "rgb(172, 167, 167)"}
 
-            else {return 1}          
-          })
+    //         else {return }          
+    //       })
 
 
-    },
+    // },
 
     showMyanmarStack: function(){
       var _that = this;
@@ -1270,7 +1262,7 @@
 
       this.svg.append("text")
         .attr("x", this.x(new Date("2006")))
-        .attr("y", this.y(2000) - 10)
+        .attr("y", this.y(1300) - 10)
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "embargoAnnotateKorea")
@@ -1288,8 +1280,8 @@
 
 
       this.svg.append("text")
-        .attr("x", this.x(new Date("2011")))
-        .attr("y", this.y(2000) - 10)
+        .attr("x", this.x(new Date("2009")))
+        .attr("y", this.y(1300) - 10)
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "embargoAnnotateSyria")
@@ -1298,12 +1290,12 @@
 
 
       this.svg.append("text")
-        .attr("x", this.x(new Date("2011")))
+        .attr("x", this.x(new Date("2007")))
         .attr("y", -10)
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "embargoAnnotateSyria")
-        .text("UN embargo starts from year 2011")
+        .text("League of Arab States embargo starts from year 2011")
         .style("opacity",0);
 
       // this.svg.append("text")
@@ -1456,7 +1448,8 @@
     showSyriaEmbargo: function(){
       var _that = this;
 
-      this.svg.selectAll(".embargoSyria")
+// embargoSyria
+      this.svg.selectAll(".embargoSyriaArab")
         .transition()
         .duration(1500)
         .delay(500)
