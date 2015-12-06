@@ -126,6 +126,45 @@
       /*fill:rgba(63,63,63,.9);*/
     }
 
+    .key{
+      width: 20px;
+      height: 20px;
+      margin-bottom: 5px;
+    }
+
+    #one .author{
+      margin-top: 10px;
+      margin-bottom: 15px;
+      font-size: 0.8em;
+    }
+
+    #Chinakey{
+      background-color: rgba(190, 108, 141,.7);
+    }
+
+    #Myanmarkey{
+      background-color: rgba(253, 193, 48,.7);
+    }
+
+    #Koreakey{
+      background-color: rgba(186, 215, 46,.7);
+    }
+
+    #Syriakey{
+      background-color: rgba(127, 164, 206,.7);
+    }
+
+    .keybox{
+      float:left;
+    }
+
+
+    span{
+      margin-left: 23px;
+      font-family: "Helvetica Neue";
+      font-size: .7em;
+    }
+
     .embargoChina {
       fill: #ded;
     /*fill: rgba(63,63,63, 0.7);*/
