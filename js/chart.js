@@ -113,39 +113,6 @@
         }
       });
 
-
-      // $(".title").each(function(){
-      //     // var objectTop = $(this).offset().top;
-      //     // var windowBottom = $(window).scrollTop() + $(window).innerHeight();
-
-      //     objectTop = $(this).offset().top;
-      //     windowBottom = $(window).scrollTop() + $(window).innerHeight();
-
-      //     if ( objectTop < windowBottom ) {
-      //       if ( objectTop < windowBottom - animation_height ) {
-      //         $("#graphic").css( {
-      //           transition: 'background-color 1.7s linear',
-      //           'background-color': 'white'
-      //         });
-
-      //         $(".title").css( {
-      //           transition: 'color 1.7s linear',
-      //           'color': 'rgba(0,0,0,.8)'
-      //         });
-      //     } else {
-      //       $("#graphic").css( {
-      //         transition: 'background-color 0.8s linear',
-      //         // opacity: (windowBottom - objectTop) * ratio
-      //         'background-color': 'rgba(0,0,0,.9)'
-      //       });
-
-      //     }
-
-      // } else {
-      //   $("#graphic").css( 'background-color', 'rgba(0,0,0,.9)' );
-      //   }
-      // });
-
       objectTop = $(".text").offset().top;
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
@@ -182,6 +149,7 @@
       if (objectTop < windowBottom - animation_height && this.hasChinaAreaTriggered === false) {
         // this.cleanLine()
         this.showChinaStack();
+        this.showChinaEmbargo();
         this.hasChinaAreaTriggered = true;
       } 
 
@@ -190,7 +158,7 @@
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasChinaEmbargoTriggered === false) {
-        this.showChinaEmbargo();
+        // this.showChinaEmbargo();
         this.hasChinaEmbargoTriggered = true;
       } 
 
@@ -219,6 +187,8 @@
 
       if (objectTop < windowBottom - animation_height && this.hasMyanmarAreaTriggered === false) {
         this.showMyanmarStack();
+        this.showMyanmarEmbargo();
+        // this.updateAxis();
         // this.DrawEmbargoMyanmar();
         this.hasMyanmarAreaTriggered = true;
         
@@ -228,7 +198,7 @@
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasMyanmarEmbargoTriggered === false) {
-        this.showMyanmarEmbargo();
+        // this.showMyanmarEmbargo();
         this.hasMyanmarEmbargoTriggered = true;
         
       } 
@@ -248,6 +218,7 @@
       if (objectTop < windowBottom - animation_height && this.hasKoreaEmbargoTriggered === false) {
         this.showKoreaStack();
         this.showKoreaEmbargo();
+        // this.updateAxis();
         this.hasKoreaEmbargoTriggered = true;
         
       } 
@@ -296,6 +267,7 @@
 
       if (objectTop < windowBottom - animation_height && this.hasSyriaAreaTriggered === false) {
         this.showSyriaStack();
+        this.showSyriaEmbargo();
         this.hasSyriaAreaTriggered = true;
         
       } 
@@ -304,7 +276,7 @@
       windowBottom = $(window).scrollTop() + $(window).innerHeight();
 
       if (objectTop < windowBottom - animation_height && this.hasSyriaEmbargoTriggered === false) {
-        this.showSyriaEmbargo();
+        // this.showSyriaEmbargo();
         this.hasSyriaEmbargoTriggered = true;
         
       } 
@@ -324,7 +296,9 @@
 
       if (this.hasLineTriggered === false) {
         this.lineChart();
+        this.showAxis();
         this.hasLineTriggered = true;
+
         
       } 
       // this.lineChart();
@@ -359,13 +333,13 @@
       this.svg
         .selectAll(".axis")
         .transition()
-        .duration(100)
+        .duration(400)
         .style("opacity", 1.0);
 
       this.svg
         .selectAll(".axis_lable")
         .transition()
-        .duration(100)
+        .duration(400)
         .delay(500)
         .style("opacity", 1.0);
 
@@ -634,18 +608,23 @@
         .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
         .style("fill", 
           function(d){
-            if(d.key == "Poland"){ return "#de9e02"}
+            if(d.key == "Russia"){ return "#de9e02"}
+            // else if
+            //   (d.key == "China"){ return "rgb(172, 167, 167)"}
             else if
-              (d.key == "Russia"){ return "rgb(172, 167, 167)"}
-            else if
-              (d.key == "United Kingdom"){ return "#fdc949"}
-            else if
-              (d.key == "Germany (FRG)"){ return "#fed87c"}
+              (d.key == "China"){ return "#fdc949"}
+            // else if
+            //   (d.key == "Germany (FRG)"){ return "#fed87c"}
             // else if
             //   (d.key == "Denmark"){ return "#fd9f30"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
+
+      this.svg.select(".y.axis.grid")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis())
 
     },
 
@@ -685,18 +664,23 @@
         .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
         .style("fill", 
           function(d){
-            if(d.key == "China"){ return "#829620"}
-            else if
-              (d.key == "Russia"){ return "#e3efab"}
-            else if
-              (d.key == "Kazakhstan"){ return "#bad72e"}
-            else if
-              (d.key == "Soviet Union"){ return "#5d6b17"}
-            else if
-              (d.key == "United States"){ return "#cee36c"}
+            if(d.key == "Russia"){ return "#829620"}
+            // else if
+            //   (d.key == "Russia"){ return "#e3efab"}
+            // else if
+            //   (d.key == "Kazakhstan"){ return "#bad72e"}
+            // else if
+            //   (d.key == "Soviet Union"){ return "#5d6b17"}
+            // else if
+            //   (d.key == "United States"){ return "#cee36c"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
+
+        this.svg.select(".y.axis")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis());
 
     },
 
@@ -736,24 +720,29 @@
         .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
         .style("fill", 
           function(d){
-            if(d.key == "Bulgaria"){ return "rgb(16,38,52)"}
+            if(d.key == "Russia"){ return "rgb(202,224,239)"}
             else if
-              (d.key == "Czechoslovakia"){ return "rgb(30,70,97)"}
+              (d.key == "North Korea"){ return "rgb(16,38,52)"}
             else if
-              (d.key == "France"){ return "rgb(43,103,142)"}
+              (d.key == "Belarus"){ return "rgb(30,70,97)"}
             else if
-              (d.key == "Libya"){ return "rgb(53,125,172)"}
+              (d.key == "Iran"){ return "rgb(43,103,142)"}
             else if
-              (d.key == "Poland"){ return "rgb(66,146,197)"}
-            else if
-              (d.key == "Slovakia"){ return "rgb(112,172,211)"}
-            else if
-              (d.key == "Soviet Union"){ return "rgb(157,198,225)"}
-            else if
-              (d.key == "United Kingdom"){ return "rgb(202,224,239)"}
+              (d.key == "China"){ return "rgb(66,146,197)"}
+            // else if
+            //   (d.key == "Slovakia"){ return "rgb(112,172,211)"}
+            // else if
+            //   (d.key == "Soviet Union"){ return "rgb(157,198,225)"}
+            // else if
+            //   (d.key == "United Kingdom"){ return "rgb(202,224,239)"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
+
+        this.svg.select(".y.axis")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis());
 
     },
 
@@ -827,6 +816,8 @@
               (d.key == "Germany (FRG)"){ return "#8d3f5e"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
+
+
 
 
 
@@ -927,7 +918,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoMyanmar")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       // console.log("START LAST CHART NOW")
 
@@ -972,21 +963,24 @@
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("2006")))
-        .attr("y", this.y(2000))
-        .attr("width", barWidth)
-        .attr("height", 0)
-        .attr("class", "band")
-        .attr("class", "embargoKorea")
-        .style("opacity", 0.4);
-
-      this.svg.append("rect")
-        .attr("x", this.x(new Date("2006")))
         .attr("y", 0)
         .attr("width", barWidth)
         .attr("height", 0)
         .attr("class", "band")
-        .attr("class", "embargoKoreaUN")
-        .style("opacity", 0.4);
+        .attr("class", "embargoKorea")
+        .style("opacity", 0.25);
+
+
+
+
+      // this.svg.append("rect")
+      //   .attr("x", this.x(new Date("2006")))
+      //   .attr("y", 0)
+      //   .attr("width", barWidth)
+      //   .attr("height", 0)
+      //   .attr("class", "band")
+      //   .attr("class", "embargoKoreaUN")
+      //   .style("opacity", 0.4);
 
     },
     showIranStack: function(){
@@ -1034,7 +1028,7 @@
         .attr("height", 0)
         // .attr("class", "band")
         .attr("class", "embargoIranUN")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("2007")))
@@ -1043,7 +1037,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoIran")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       // this.svg.append("rect")
       //   .attr("x", this.x(new Date("2006")))
@@ -1101,7 +1095,7 @@
         .attr("height", 0)
         // .attr("class", "band")
         .attr("class", "embargoSyriaArab")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       this.svg.append("rect")
         .attr("x", this.x(new Date("2011")))
@@ -1110,7 +1104,7 @@
         .attr("height", 0)
         .attr("class", "band")
         .attr("class", "embargoSyria")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       // this.svg.append("rect")
       //   .attr("x", this.x(new Date("2006")))
@@ -1181,10 +1175,10 @@
         .duration(2000)
         .attr("height", 0);
 
-      this.svg.selectAll(".embargoKoreaUN")
-        .transition()
-        .duration(2000)
-        .attr("height", 0);
+      // this.svg.selectAll(".embargoKoreaUN")
+      //   .transition()
+      //   .duration(2000)
+      //   .attr("height", 0);
 
       this.svg.selectAll(".embargoAnnotateKorea")
         .transition()
@@ -1240,7 +1234,7 @@
         .attr("height", 0)
         // .attr("class", "band")
         .attr("class", "embargoChina")
-        .style("opacity", 0.4);
+        .style("opacity", 0.25);
 
       this.svg.append("text")
         .attr("x", this.x(new Date("1989")))
