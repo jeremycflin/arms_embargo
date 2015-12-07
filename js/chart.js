@@ -188,6 +188,7 @@
       if (objectTop < windowBottom - animation_height && this.hasMyanmarAreaTriggered === false) {
         this.showMyanmarStack();
         this.showMyanmarEmbargo();
+        // this.updateAxis();
         // this.DrawEmbargoMyanmar();
         this.hasMyanmarAreaTriggered = true;
         
@@ -217,6 +218,7 @@
       if (objectTop < windowBottom - animation_height && this.hasKoreaEmbargoTriggered === false) {
         this.showKoreaStack();
         this.showKoreaEmbargo();
+        // this.updateAxis();
         this.hasKoreaEmbargoTriggered = true;
         
       } 
@@ -294,7 +296,9 @@
 
       if (this.hasLineTriggered === false) {
         this.lineChart();
+        this.showAxis();
         this.hasLineTriggered = true;
+
         
       } 
       // this.lineChart();
@@ -329,13 +333,13 @@
       this.svg
         .selectAll(".axis")
         .transition()
-        .duration(100)
+        .duration(400)
         .style("opacity", 1.0);
 
       this.svg
         .selectAll(".axis_lable")
         .transition()
-        .duration(100)
+        .duration(400)
         .delay(500)
         .style("opacity", 1.0);
 
@@ -617,6 +621,11 @@
           })
         .style("opacity", 0)
 
+      this.svg.select(".y.axis.grid")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis())
+
     },
 
     koreaStack: function(){
@@ -667,6 +676,11 @@
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
+
+        this.svg.select(".y.axis")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis());
 
     },
 
@@ -724,6 +738,11 @@
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
+
+        this.svg.select(".y.axis")
+        .transition()
+        .duration(750)
+        .call(this.createYAxis());
 
     },
 
@@ -797,6 +816,8 @@
               (d.key == "Germany (FRG)"){ return "#8d3f5e"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
+
+
 
 
 
