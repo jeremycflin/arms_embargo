@@ -119,13 +119,6 @@
       stroke-dasharray: 2,2;
     }
 
-    .dot{
-      stroke-width:1;
-      /*stroke:none;*/
-      stroke: black;
-      /*fill:rgba(63,63,63,.9);*/
-    }
-
     .key{
       width: 20px;
       height: 20px;
@@ -139,19 +132,24 @@
     }
 
     #Chinakey{
-      background-color: rgba(190, 108, 141,.7);
+      color: rgb(190, 108, 141);
     }
 
     #Myanmarkey{
-      background-color: rgba(253, 193, 48,.7);
+      color: rgb(253, 193, 48);
     }
 
     #Koreakey{
-      background-color: rgba(186, 215, 46,.7);
+      color: rgb(186, 215, 46);
     }
 
     #Syriakey{
-      background-color: rgba(127, 164, 206,.7);
+      color: rgb(127, 164, 206);
+    }
+
+    .label{
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      font-size: 1.5em;
     }
 
 
