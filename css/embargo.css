@@ -263,6 +263,27 @@
       font-size: 1.1em;
     }
 
+    .russiaLabel{
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      font-size: 1.4em;
+
+    }
+
+    .koreaLabel{
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      font-size: 1.4em;
+    }
+
+    .syriaLabel{
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      font-size: 1.4em;
+    }
+
+    .chinaLabel{
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      font-size: 1.4em;
+    }
+
     /*************/
     /*************/
     /*************/
