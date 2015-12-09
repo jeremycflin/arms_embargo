@@ -513,6 +513,24 @@
       this.koreaStack();
       this.syriaStack();
 
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2005")))
+        .attr("y", this.height * 0.9)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "russiaLabel")
+        .text("Russia")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1993")))
+        .attr("y", this.height * 0.9)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "russiaLabel")
+        .text("China")
+        .style("opacity",0);
+
     },
 
     koreaStack: function(){
@@ -552,19 +570,39 @@
         .style("fill", 
           function(d){
             if(d.key == "Russia"){ return "#829620"}
-            // else if
-            //   (d.key == "Russia"){ return "#e3efab"}
-            // else if
-            //   (d.key == "Kazakhstan"){ return "#bad72e"}
-            // else if
-            //   (d.key == "Soviet Union"){ return "#5d6b17"}
-            // else if
-            //   (d.key == "United States"){ return "#cee36c"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
 
-        this.updateYaxis();
+      this.updateYaxis(layersKorea);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1994.5")))
+        .attr("y", this.height * 0.95)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "koreaLabel")
+        .text("Russia")
+        .style("opacity",0);  
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1985")))
+        .attr("y", this.height * 0.7)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "koreaLabel")
+        .text("Soviet Union")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1987")))
+        .attr("y", this.height * 0.95)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "koreaLabel")
+        .text("China")
+        .style("opacity",0);
+
 
     },
 
@@ -604,20 +642,40 @@
         .attr("d", function(d, i) {console.log(i); return _that.area(d.values); })
         .style("fill", 
           function(d){
-            if(d.key == "Russia"){ return "rgb(202,224,239)"}
-            else if
-              (d.key == "North Korea"){ return "rgb(16,38,52)"}
-            else if
-              (d.key == "Belarus"){ return "rgb(30,70,97)"}
-            else if
-              (d.key == "Iran"){ return "rgb(43,103,142)"}
-            else if
-              (d.key == "China"){ return "rgb(66,146,197)"}
+            if(d.key == "Russia"){ return "rgb(30,70,97)"}
+            // else if  
+            //   (d.key == "North Korea"){ return "rgb(16,38,52)"}
+            // else if
+            //   (d.key == "Belarus"){ return "rgb(30,70,97)"}
+            // else if
+            //   (d.key == "Iran"){ return "rgb(43,103,142)"}
+            // else if
+            //   (d.key == "China"){ return "rgb(66,146,197)"}
             else {return "rgba(172, 167, 167, .5)"}          
           })
         .style("opacity", 0)
 
-        this.updateYaxis();
+      // rgb(202,224,239)
+
+      this.updateYaxis(layersSyria);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("1984")))
+        .attr("y", this.height * 0.7)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "syriaLabel")
+        .text("Czechoslovakia")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2011")))
+        .attr("y", this.height * 0.92)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "syriaLabel")
+        .text("Russia")
+        .style("opacity",0);
 
     },
 
@@ -697,6 +755,24 @@
             else {return 0.3}          
           })
 
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2002.5")))
+        .attr("y", this.height * 0.7)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "chinaLabel")
+        .text("Russia")
+        .style("opacity",0);
+
+      this.svg.append("text")
+        .attr("x", this.x(new Date("2002.5")))
+        .attr("y", this.height * 0.98)
+        .attr("width", this.width)
+        .attr("height", 0)
+        .attr("class", "chinaLabel")
+        .text("France")
+        .style("opacity",0);
+
 
       //////////////////////////////////////  
       ////////////////////////////////////  
@@ -756,6 +832,12 @@
         .transition()
         .style("opacity",0)
 
+      d3.selectAll(".russiaLabel")
+        .transition()
+        .duration(1000)
+        .delay(100)
+        .style("opacity",1)
+
       d3.select("#rectClip rect")
         .transition().duration(3000)
         .attr("width", this.width);
@@ -777,33 +859,6 @@
     showKoreaStack: function(){
       var _that = this;
 
-
-      // d3.selectAll(".layersKorea")
-      //   .transition()
-      //   .style("opacity",1)
-
-
-      // d3.selectAll(".layersMyanmar")
-      //   .transition()
-      //   .style("opacity",0)
-
-      // d3.select("#rectClip rect")
-      //   .transition().duration(3000)
-      //   .attr("width", this.width);
-
-      // this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
-
-      // var barWidth = _that.x(new Date("2014")) - _that.x(new Date("2006"));
-
-      // this.svg.append("rect")
-      //   .attr("x", this.x(new Date("2006")))
-      //   .attr("y", 0)
-      //   .attr("width", barWidth)
-      //   .attr("height", 0)
-      //   .attr("class", "band")
-      //   .attr("class", "embargoKorea")
-      //   .style("opacity", 0.25);
-
       d3.selectAll(".layersKorea")
         .transition()
         .duration(1000)
@@ -812,6 +867,12 @@
       d3.selectAll(".layersMyanmar")
         .transition()
         .style("opacity",0)
+
+      d3.selectAll(".koreaLabel")
+        .transition()
+        .duration(1000)
+        .delay(100)
+        .style("opacity",1)
 
       d3.select("#rectClip rect")
         .transition().duration(3000)
@@ -928,9 +989,11 @@
         .transition().duration(3000)
         .attr("width", this.width);
 
-       // d3.select("#rectClip rect")
-       //  .transition().duration(3000)
-       //  .attr("width", 0);
+      d3.selectAll(".syriaLabel")
+        .transition()
+        .duration(1000)
+        .delay(100)
+        .style("opacity",1)
 
       this.x.domain([new Date("1980"), new Date("2014")]).range([0, this.width]);
 
@@ -976,6 +1039,11 @@
         .duration(2000)
         .attr("height", 0);
 
+      d3.selectAll(".chinaLabel")
+        .transition()
+        .duration(800)
+        .style("opacity",0)
+
       this.svg.selectAll(".embargoAnnotateChina")
         .transition()
         .duration(1800)
@@ -995,11 +1063,16 @@
         .duration(2000)
         .attr("height", 0);
 
-       this.svg.selectAll(".embargoAnnotateMyanmar")
+      this.svg.selectAll(".embargoAnnotateMyanmar")
         .transition()
         .duration(2000)
         .ease("linear")
         .style("opacity",0);
+
+      d3.selectAll(".russiaLabel")
+        .transition()
+        .duration(800)
+        .style("opacity",0)
     },
 
     cleanKorearStack: function(){
@@ -1014,16 +1087,16 @@
         .duration(2000)
         .attr("height", 0);
 
-      // this.svg.selectAll(".embargoKoreaUN")
-      //   .transition()
-      //   .duration(2000)
-      //   .attr("height", 0);
-
       this.svg.selectAll(".embargoAnnotateKorea")
         .transition()
         .duration(2000)
         .ease("linear")
         .style("opacity",0);
+
+      d3.selectAll(".koreaLabel")
+        .transition()
+        .duration(800)
+        .style("opacity",0)
 
     },
 
@@ -1193,6 +1266,12 @@
         .transition()
         .duration(1800)
         .ease("linear")
+        .style("opacity",1)
+
+      d3.selectAll(".chinaLabel")
+        .transition()
+        .duration(800)
+        .delay(1500)
         .style("opacity",1)
     },
 
